@@ -9,7 +9,6 @@ namespace WebDjProject.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
-
     public class ExternalLoginListViewModel
     {
         public string ReturnUrl { get; set; }
@@ -86,6 +85,9 @@ namespace WebDjProject.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Profile Image")]
+        public byte[] UserPhoto { get; set; }
     }
 
     public class ResetPasswordViewModel
