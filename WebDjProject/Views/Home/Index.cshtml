@@ -32,16 +32,21 @@
 </head>
 
 <body class="container">
-    <h1 class="text-salmon">Spotify Web Playback SDK Template</h1>
+
+    <div class="inputBox">
+        <input id="searchInput" name="term" value="">
+    </div>
+
+    <input id="toggle" type="button" value="Play/Pause" />
+    <input id="search" type="button" value="Search for albums." />
+
+    <table id=resultsTable></table>
+
+    <h4 class="text-salmon">Spotify Web Playback SDK Template</h4>
     <h4>This app uses the implicit grant authorization flow to get an access token and initialise the Web Playback SDK. It then uses the Spotify Connect Web API to play a song.</h4>
     <p>If everything is set up properly, you should hear some music!</p>
     <img id="current-track" />
-    <h3 id="current-track-name"></h3>
-
-    <input id="toggle" type="button" value="Play/Pause" />
-    <input id="search" type="button" value="Search For 'Rock' albums." />
-
-    <table id=resultsTable></table>
+    <h4 id="current-track-name"></h4>
 
 </body>
 
@@ -49,6 +54,10 @@
 </html>
 
 <script>
+
+    // Reset search box
+    document.getElementById('searchInput').value = ""
+
     // Get the hash of the url
     const hash = window.location.hash
         .substring(1)
@@ -132,8 +141,9 @@
             });
         }
 
+        
         function search() {
-            spotifyAlbumSearch("Rock")
+            spotifyAlbumSearch(document.getElementById('searchInput').value)
         }
     }
 
@@ -151,13 +161,18 @@
     }
 
     var resultsArray = [];
-    var searchTerms = "";
     var dataResults = "";
     var searchURL = "https://api.spotify.com/v1/search?q=";
     var table = document.getElementById("resultsTable");
-    var songIndexNum = 0;
+    //var songIndexNum = 0;
 
     function spotifyAlbumSearch(term) {
+
+        for (i = 0; i < 20; i++) {
+            $("#resultsTable tr").remove();
+        }
+
+        term = term.replace(" ", "+");
         $.ajax({
             url: searchURL + term + "&type=album&market=US",
             type: "GET",
@@ -181,7 +196,6 @@
 
                     $.each(results, function (key, val) {
                         console.log(val.name);
-                        //$("#resultsTable tr").remove();
                         if (val !== null) { 
                             var row = table.insertRow();
                             index+=1
