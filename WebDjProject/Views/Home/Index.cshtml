@@ -37,16 +37,18 @@
         <input id="searchInput" name="term" value="">
     </div>
 
-    <input id="toggle" type="button" value="Play/Pause" />
-    <input id="search" type="button" value="Search for albums." />
+    <!--<input id="toggle" type="button" value="Play/Pause" />-->
+    <input id="searchAlbums" type="button" value="Search for albums." />
 
     <table id=resultsTable></table>
 
-    <h4 class="text-salmon">Spotify Web Playback SDK Template</h4>
+    <!--<h4 class="text-salmon">Spotify Web Playback SDK Template</h4>
     <h4>This app uses the implicit grant authorization flow to get an access token and initialise the Web Playback SDK. It then uses the Spotify Connect Web API to play a song.</h4>
     <p>If everything is set up properly, you should hear some music!</p>
+
+    <h4> TEST TRACK </h4>
     <img id="current-track" />
-    <h4 id="current-track-name"></h4>
+    <h4 id="current-track-name"></h4>-->
 
 </body>
 
@@ -58,6 +60,7 @@
     // Reset search box
     document.getElementById('searchInput').value = ""
 
+    // SDK TEMPLATE
     // Get the hash of the url
     const hash = window.location.hash
         .substring(1)
@@ -117,23 +120,23 @@
             console.log('Ready with Device ID', data.device_id);
 
             // Play a track using our new device ID
-            // play(data.device_id);
+            //play(data.device_id);
         });
 
         // Connect to the player!
         player.connect();
 
-        var el = document.getElementById("toggle");
-        if (el.addEventListener)
-            el.addEventListener("click", toggle, false);
-        else if (el.attachEvent)
-            el.attachEvent('onclick', toggle);
+        //var el = document.getElementById("toggle");
+        //if (el.addEventListener)
+        //   el.addEventListener("click", toggle, false);
+        //else if (el.attachEvent)
+        //    el.attachEvent('onclick', toggle);
 
-        var el = document.getElementById("search");
+        var el = document.getElementById("searchAlbums");
         if (el.addEventListener)
-            el.addEventListener("click", search, false);
+            el.addEventListener("click", searchAlbums, false);
         else if (el.attachEvent)
-            el.attachEvent('onclick', search);
+            el.attachEvent('onclick', searchAlbums);
 
         function toggle() {
             player.togglePlay().then(() => {
@@ -141,8 +144,7 @@
             });
         }
 
-        
-        function search() {
+        function searchAlbums() {
             spotifyAlbumSearch(document.getElementById('searchInput').value)
         }
     }
@@ -193,23 +195,26 @@
 
                     var results = albumItemList[1];
                     console.log(results);
-
-                    $.each(results, function (key, val) {
-                        console.log(val.name);
-                        if (val !== null) { 
+                    if (results.length >= 20) {
+                        $.each(results, function (key, val) {
                             var row = table.insertRow();
-                            index+=1
-                            row.innerHTML = "<td>" + index + ". " + val.name + "</td>";
-                            if (val === undefined) {
-                                var row = table.insertRow();
-                                row.innerHTML = "No more results...";
-                                return;
-                            }
-                        } else {
+                            index += 1
+                            row.innerHTML = '<h3>' + index + '</h3><iframe src="https://open.spotify.com/embed/album/' + val.id + '" width="300" height="300" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>'
+                        });
+                    } else if (results.length >= 1 && results.length < 20) {
+                        $.each(results, function (key, val) {
                             var row = table.insertRow();
-                            row.innerHTML = "No results...";
-                        }
-                    });
+                            index += 1
+                            row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3><iframe src="https://open.spotify.com/embed/album/' + val.id + '" width="300" height="300" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>'
+                        });
+                        var row = table.insertRow();
+                        row.innerHTML = "No more results...";
+                        return;
+                    } else {
+                        var row = table.insertRow();
+                        row.innerHTML = "No results...";
+                    }
+                    
                 };
             }
         });
