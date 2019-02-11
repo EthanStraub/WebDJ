@@ -38,7 +38,10 @@
     <img id="current-track" />
     <h3 id="current-track-name"></h3>
 
-    <input id="toggle" type="button" value="Play/Pause"/>
+    <input id="toggle" type="button" value="Play/Pause" />
+    <input id="search" type="button" value="Search For 'Rock' albums." />
+
+    <table id=resultsTable></table>
 
 </body>
 
@@ -105,7 +108,7 @@
             console.log('Ready with Device ID', data.device_id);
 
             // Play a track using our new device ID
-            play(data.device_id);
+            // play(data.device_id);
         });
 
         // Connect to the player!
@@ -117,10 +120,20 @@
         else if (el.attachEvent)
             el.attachEvent('onclick', toggle);
 
+        var el = document.getElementById("search");
+        if (el.addEventListener)
+            el.addEventListener("click", search, false);
+        else if (el.attachEvent)
+            el.attachEvent('onclick', search);
+
         function toggle() {
             player.togglePlay().then(() => {
                 console.log('Toggled playback!');
             });
+        }
+
+        function search() {
+            spotifyAlbumSearch("Rock")
         }
     }
 
@@ -137,6 +150,57 @@
         });
     }
 
-    
+    var resultsArray = [];
+    var searchTerms = "";
+    var dataResults = "";
+    var searchURL = "https://api.spotify.com/v1/search?q=";
+    var table = document.getElementById("resultsTable");
+    var songIndexNum = 0;
+
+    function spotifyAlbumSearch(term) {
+        $.ajax({
+            url: searchURL + term + "&type=album&market=US",
+            type: "GET",
+            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+            success: function (data) {
+
+                console.log(data);
+                for (var albumData in data) {
+
+                    var albumItemList = [];
+                    var albums = data[albumData];
+                    
+                    for (var item in albums) {
+                        albumItemList.push(albums[item]);
+                    }
+
+                    var index = 0;
+
+                    var results = albumItemList[1];
+                    console.log(results);
+
+                    $.each(results, function (key, val) {
+                        console.log(val.name);
+                        //$("#resultsTable tr").remove();
+                        if (val !== null) { 
+                            var row = table.insertRow();
+                            index+=1
+                            row.innerHTML = "<td>" + index + ". " + val.name + "</td>";
+                            if (val === undefined) {
+                                var row = table.insertRow();
+                                row.innerHTML = "No more results...";
+                                return;
+                            }
+                        } else {
+                            var row = table.insertRow();
+                            row.innerHTML = "No results...";
+                        }
+                    });
+                };
+            }
+        });
+    }
+
+   
 
 </script>
