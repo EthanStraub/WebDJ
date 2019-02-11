@@ -39,6 +39,7 @@
 
     <!--<input id="toggle" type="button" value="Play/Pause" />-->
     <input id="searchAlbums" type="button" value="Search for albums." />
+    <input id="searchArtists" type="button" value="Search for artists." />
 
     <table id=resultsTable></table>
 
@@ -86,7 +87,11 @@
         'streaming',
         'user-read-birthdate',
         'user-read-private',
-        'user-modify-playback-state'
+        'user-modify-playback-state',
+        'user-top-read',
+        'user-read-recently-played',
+        'user-read-currently-playing',
+        'app-remote-control'
     ];
 
     // If there is no token, redirect to Spotify authorization
@@ -132,11 +137,17 @@
         //else if (el.attachEvent)
         //    el.attachEvent('onclick', toggle);
 
-        var el = document.getElementById("searchAlbums");
-        if (el.addEventListener)
-            el.addEventListener("click", searchAlbums, false);
+        var searchAlbumBtn = document.getElementById("searchAlbums");
+        if (searchAlbumBtn.addEventListener)
+            searchAlbumBtn.addEventListener("click", searchAlbums, false);
         else if (el.attachEvent)
-            el.attachEvent('onclick', searchAlbums);
+            searchAlbumBtn.attachEvent('onclick', searchAlbums);
+
+        var searchArtistBtn = document.getElementById("searchArtists");
+        if (searchArtistBtn.addEventListener)
+            searchArtistBtn.addEventListener("click", searchArtists, false);
+        else if (el.attachEvent)
+            searchArtistBtn.attachEvent('onclick', searchArtists);
 
         function toggle() {
             player.togglePlay().then(() => {
@@ -146,6 +157,10 @@
 
         function searchAlbums() {
             spotifyAlbumSearch(document.getElementById('searchInput').value)
+        }
+
+        function searchArtists() {
+            spotifyArtistSearch(document.getElementById('searchInput').value)
         }
     }
 
@@ -203,6 +218,16 @@
                         });
                     } else if (results.length >= 1 && results.length < 20) {
                         $.each(results, function (key, val) {
+
+                            //test case -- John Maus
+                            var artistItemList = [];
+                            var artistData = val.artists;
+                            for (var item in artistData) {
+                                artistItemList.push(artistData[item[0]].name);
+                            }
+                            console.log(artistItemList);
+
+
                             var row = table.insertRow();
                             index += 1
                             row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3><iframe src="https://open.spotify.com/embed/album/' + val.id + '" width="300" height="300" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>'
@@ -220,6 +245,60 @@
         });
     }
 
+    function spotifyArtistSearch(artist) {
+        for (i = 0; i < 20; i++) {
+            $("#resultsTable tr").remove();
+        }
+
+        artist = artist.replace(" ", "+");
+        $.ajax({
+            url: searchURL + artist + "&type=artist&market=US",
+            type: "GET",
+            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+            success: function (data) {
+
+                console.log(data);
+                for (var artistData in data) {
+
+                    var artistItemList = [];
+                    var artists = data[artistData];
+
+                    for (var item in artists) {
+                        artistItemList.push(artists[item]);
+                    }
+
+                    var index = 0;
+
+                    var results = artistItemList[1];
+                    console.log(results);
+                    if (results.length >= 20) {
+                        $.each(results, function (key, val) {
+                            var row = table.insertRow();
+                            index += 1
+                            row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3>'
+                        });
+                    } else if (results.length >= 1 && results.length < 20) {
+                        $.each(results, function (key, val) {
+                            var row = table.insertRow();
+                            index += 1
+                            row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3>'
+                        });
+                        var row = table.insertRow();
+                        row.innerHTML = "No more results...";
+                        return;
+                    } else {
+                        var row = table.insertRow();
+                        row.innerHTML = "No results...";
+                    }
+
+                };
+            }
+        });
+    }
+
+    function spotifyTrackSearch(term) {
+
+    }
    
 
 </script>
