@@ -33,6 +33,18 @@
 
 <body class="container">
 
+    <form action="@Url.Action("Index", "Home")" method="POST">
+        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_6cDEXb7U4fVzevejZgaA1gDW"
+                data-amount="999"
+                data-name="Demo Site"
+                data-description="Example charge"
+                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                data-locale="auto">
+        </script>
+    </form>
+
+
     <div class="inputBox">
         <input id="searchInput" name="term" value="">
     </div>
@@ -274,13 +286,13 @@
                     if (results.length >= 20) {
                         $.each(results, function (key, val) {
                             var row = table.insertRow();
-                            index += 1
+                            index += 1;
                             row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3>'
                         });
                     } else if (results.length >= 1 && results.length < 20) {
                         $.each(results, function (key, val) {
                             var row = table.insertRow();
-                            index += 1
+                            index += 1;
                             row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3>'
                         });
                         var row = table.insertRow();

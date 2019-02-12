@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,18 @@ namespace WebDjProject.Controllers
     {
         public ActionResult Index()
         {
+            StripeConfiguration.SetApiKey("sk_test_dFDizp08z3Cyn2klQBvAMvOc");
+
+            var options = new ChargeCreateOptions
+            {
+                Amount = 999,
+                Currency = "usd",
+                SourceId = "tok_visa",
+                ReceiptEmail = "ethan.straub@gmail.com",
+            };
+            var service = new ChargeService();
+            Charge charge = service.Create(options);
+
             return View();
         }
 
