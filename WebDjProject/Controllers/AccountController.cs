@@ -174,7 +174,6 @@ namespace WebDjProject.Controllers
                 //Add user to registered user role
                 var userStore = new UserStore<ApplicationUser>(context);
                 var userManager = new UserManager<ApplicationUser>(userStore);
-                
 
                 //Here we pass the byte array to user context to store in db
                 user.UserPhoto = imageData;
