@@ -3,16 +3,7 @@
     ViewBag.Title = "Home Page";
 }
 
-<!--<h1>
-    <strong>@ViewBag.Name</strong>'s Profile Image ..
 
-    <img src="@Url.Action("UserPhotos", "Home" )" style="width:160px;height:160px; background: #FFFFFF;
-    margin: auto;
-    -moz-border-radius: 60px;
-    border-radius: 100px;
-    padding: 6px;
-    box-shadow: 0px 0px 20px #888;" />
-</h1>-->
 
 <!-- SDK testing grounds -->
 <html>
@@ -96,13 +87,19 @@
     const clientId = 'ddb6bd84d33c42aba1450a177ca0f23e';
     const redirectUri = 'http://localhost:53881/Home/Index/';
     const scopes = [
-        'streaming',
-        'user-read-birthdate',
-        'user-read-private',
+        'playlist-read-private',
         'user-modify-playback-state',
-        'user-top-read',
         'user-read-recently-played',
         'user-read-currently-playing',
+        'playlist-modify-private',
+        'app-remote-control',
+        'playlist-modify-public',
+        'user-read-birthdate',
+        'user-read-playback-state',
+        'user-read-email',
+        'streaming',
+        'user-read-private',
+        'user-top-read',
         'app-remote-control'
     ];
 
@@ -181,10 +178,11 @@
         $.ajax({
             url: "https://api.spotify.com/v1/me/player/play?device_id=" + device_id,
             type: "PUT",
+            // Example uri
             data: '{"uris": ["spotify:track:4YLXjoYmRGIXstTLtloHf2"]}',
             beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
             success: function (data) {
-                console.log(data)
+                console.log(data);
             }
         });
     }
@@ -226,7 +224,7 @@
                         $.each(results, function (key, val) {
                             var row = table.insertRow();
                             index += 1
-                            row.innerHTML = '<h3>' + index + '</h3><iframe src="https://open.spotify.com/embed/album/' + val.id + '" width="300" height="300" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>'
+                            row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3><iframe src="https://open.spotify.com/embed/album/' + val.id + '" width="300" height="300" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>'
                         });
                     } else if (results.length >= 1 && results.length < 20) {
                         $.each(results, function (key, val) {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WebDjProject.Models;
@@ -142,8 +143,6 @@ namespace WebDjProject.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            ViewBag.Name = new SelectList(context.Roles.Where(u => !u.Name.Contains("Admin") && !u.Name.Contains("PremiumUser"))
-                                            .ToList(), "Name", "Name");
             return View();
         }
 
@@ -170,7 +169,12 @@ namespace WebDjProject.Controllers
                 }
 
 
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+
+                //Add user to registered user role
+                var userStore = new UserStore<ApplicationUser>(context);
+                var userManager = new UserManager<ApplicationUser>(userStore);
+                
 
                 //Here we pass the byte array to user context to store in db
                 user.UserPhoto = imageData;
@@ -179,7 +183,7 @@ namespace WebDjProject.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
+                    userManager.AddToRole(user.Id, "RegisteredUser");
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771  Jump ;            
 
                     return RedirectToAction("Index", "Home");

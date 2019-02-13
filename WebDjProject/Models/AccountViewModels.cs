@@ -63,10 +63,6 @@ namespace WebDjProject.Models
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "User Role")]
-        public string UserRoles { get; set; }
-
-        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -88,6 +84,11 @@ namespace WebDjProject.Models
 
         [Display(Name = "Profile Image")]
         public byte[] UserPhoto { get; set; }
+
+        //outdated
+        //[Required]
+        //[Display(Name = "User Role")]
+        //public string UserRoles { get; set; }
     }
 
     public class ResetPasswordViewModel
