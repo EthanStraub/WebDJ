@@ -182,7 +182,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PlaylistsController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -192,12 +193,16 @@
     <Compile Include="Migrations\201902131745451_FirstMigration.Designer.cs">
       <DependentUpon>201902131745451_FirstMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902132010578_SecondMigration.cs" />
+    <Compile Include="Migrations\201902132010578_SecondMigration.Designer.cs">
+      <DependentUpon>201902132010578_SecondMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Playlist.cs" />
     <Compile Include="Models\Playlist_Song.cs" />
+    <Compile Include="Models\ProfileViewModels.cs" />
     <Compile Include="Models\Song.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -252,17 +257,19 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
     <Content Include="Views\Role\Create.cshtml" />
+    <Content Include="Views\Playlists\Create.cshtml" />
+    <Content Include="Views\Playlists\Delete.cshtml" />
+    <Content Include="Views\Playlists\Details.cshtml" />
+    <Content Include="Views\Playlists\Edit.cshtml" />
+    <Content Include="Views\Playlists\Index.cshtml" />
+    <Content Include="Views\Profile\ChangePassword.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Profile\SetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -283,6 +290,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201902131745451_FirstMigration.resx">
       <DependentUpon>201902131745451_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902132010578_SecondMigration.resx">
+      <DependentUpon>201902132010578_SecondMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,0 +1,50 @@
+﻿@model WebDjProject.Models.Playlist
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Playlist</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.playlistName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.playlistName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.songCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.songCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.spotifyPlaylistID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.spotifyPlaylistID)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.playlistId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

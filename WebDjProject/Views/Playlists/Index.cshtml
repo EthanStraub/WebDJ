@@ -1,0 +1,51 @@
+﻿@model IEnumerable<WebDjProject.Models.Playlist>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplicationUser.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.playlistName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.songCount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.spotifyPlaylistID)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplicationUser.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.playlistName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.songCount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.spotifyPlaylistID)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.playlistId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.playlistId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.playlistId })
+        </td>
+    </tr>
+}
+
+</table>

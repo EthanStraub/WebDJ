@@ -33,5 +33,7 @@ namespace WebDjProject.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<WebDjProject.Models.Playlist> Playlists { get; set; }
     }
 }

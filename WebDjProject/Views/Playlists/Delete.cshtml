@@ -1,0 +1,56 @@
+﻿@model WebDjProject.Models.Playlist
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Playlist</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.playlistName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.playlistName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.songCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.songCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.spotifyPlaylistID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.spotifyPlaylistID)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

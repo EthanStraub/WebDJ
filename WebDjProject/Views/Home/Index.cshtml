@@ -3,25 +3,7 @@
     ViewBag.Title = "Home Page";
 }
 
-
-
-<!-- SDK testing grounds -->
 <html>
-
-<head>
-    <title>Spotify Web Playback SDK Template</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
-            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-            crossorigin="anonymous"></script>
-
-    <!-- Include the Web Playback SDK -->
-    <script src="https://sdk.scdn.co/spotify-player.js"></script>
-
-</head>
-
 <body class="container">
 
     <form action="@Url.Action("Index", "Home")" method="POST">
@@ -64,7 +46,6 @@
     // Reset search box
     document.getElementById('searchInput').value = ""
 
-    // SDK TEMPLATE
     // Get the hash of the url
     const hash = window.location.hash
         .substring(1)
@@ -82,10 +63,13 @@
     let _token = hash.access_token;
 
     const authEndpoint = 'https://accounts.spotify.com/authorize';
+    const refreshEndpoint = 'https://accounts.spotify.com/api/token'
 
     // Replace with your app's client ID, redirect URI and desired scopes
     const clientId = 'ddb6bd84d33c42aba1450a177ca0f23e';
     const redirectUri = 'http://localhost:53881/Home/Index/';
+    const clientSecret = 'd2e2b989c762414c88b6c3121dd44a65';
+
     const scopes = [
         'playlist-read-private',
         'user-modify-playback-state',
@@ -108,83 +92,24 @@
         window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
     }
 
-    // Set up the Web Playback SDK
+    var searchAlbumBtn = document.getElementById("searchAlbums");
+    if (searchAlbumBtn.addEventListener)
+        searchAlbumBtn.addEventListener("click", searchAlbums, false);
+    else if (searchAlbumBtn.attachEvent)
+        searchAlbumBtn.attachEvent('onclick', searchAlbums);
 
-    window.onSpotifyPlayerAPIReady = () => {
-        const player = new Spotify.Player({
-            name: 'Web Playback SDK Template',
-            getOAuthToken: cb => { cb(_token); }
-        });
+    var searchArtistBtn = document.getElementById("searchArtists");
+    if (searchArtistBtn.addEventListener)
+        searchArtistBtn.addEventListener("click", searchArtists, false);
+    else if (searchArtistBtn.attachEvent)
+        searchArtistBtn.attachEvent('onclick', searchArtists);
 
-        // Error handling
-        player.on('initialization_error', e => console.error(e));
-        player.on('authentication_error', e => console.error(e));
-        player.on('account_error', e => console.error(e));
-        player.on('playback_error', e => console.error(e));
-
-        // Playback status updates
-        player.on('player_state_changed', state => {
-            console.log(state)
-            $('#current-track').attr('src', state.track_window.current_track.album.images[0].url);
-            $('#current-track-name').text(state.track_window.current_track.name);
-        });
-
-        // Ready
-        player.on('ready', data => {
-            console.log('Ready with Device ID', data.device_id);
-
-            // Play a track using our new device ID
-            //play(data.device_id);
-        });
-
-        // Connect to the player!
-        player.connect();
-
-        //var el = document.getElementById("toggle");
-        //if (el.addEventListener)
-        //   el.addEventListener("click", toggle, false);
-        //else if (el.attachEvent)
-        //    el.attachEvent('onclick', toggle);
-
-        var searchAlbumBtn = document.getElementById("searchAlbums");
-        if (searchAlbumBtn.addEventListener)
-            searchAlbumBtn.addEventListener("click", searchAlbums, false);
-        else if (el.attachEvent)
-            searchAlbumBtn.attachEvent('onclick', searchAlbums);
-
-        var searchArtistBtn = document.getElementById("searchArtists");
-        if (searchArtistBtn.addEventListener)
-            searchArtistBtn.addEventListener("click", searchArtists, false);
-        else if (el.attachEvent)
-            searchArtistBtn.attachEvent('onclick', searchArtists);
-
-        function toggle() {
-            player.togglePlay().then(() => {
-                console.log('Toggled playback!');
-            });
-        }
-
-        function searchAlbums() {
-            spotifyAlbumSearch(document.getElementById('searchInput').value)
-        }
-
-        function searchArtists() {
-            spotifyArtistSearch(document.getElementById('searchInput').value)
-        }
+    function searchAlbums() {
+        spotifyAlbumSearch(document.getElementById('searchInput').value)
     }
 
-    // Play a specified track on the Web Playback SDK's device ID
-    function play(device_id) {
-        $.ajax({
-            url: "https://api.spotify.com/v1/me/player/play?device_id=" + device_id,
-            type: "PUT",
-            // Example uri
-            data: '{"uris": ["spotify:track:4YLXjoYmRGIXstTLtloHf2"]}',
-            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
-            success: function (data) {
-                console.log(data);
-            }
-        });
+    function searchArtists() {
+        spotifyArtistSearch(document.getElementById('searchInput').value)
     }
 
     var resultsArray = [];

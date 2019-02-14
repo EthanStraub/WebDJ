@@ -82,7 +82,6 @@ namespace WebDjProject.Controllers
                 BinaryReader br = new BinaryReader(fs);
                 imageData = br.ReadBytes((int)imageFileLength);
                 return File(imageData, "image/png");
-
             }
         }
 
