@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -15,6 +18,7 @@ namespace WebDjProject.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public ProfileController()
         {
@@ -51,12 +55,13 @@ namespace WebDjProject.Controllers
         }
 
         //
-        // GET: /Manage/Index
+        // GET: /Profile/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
+                : message == ManageMessageId.PrivatizeSuccess ? "Your account has now been made private."
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : "";
 
@@ -65,19 +70,20 @@ namespace WebDjProject.Controllers
             {
                 HasPassword = HasPassword(),
             };
+
+            model.ApplicationUserId = userId;
             return View(model);
         }
 
-
         //
-        // GET: /Manage/ChangePassword
+        // GET: /Profile/ChangePassword
         public ActionResult ChangePassword()
         {
             return View();
         }
 
         //
-        // POST: /Manage/ChangePassword
+        // POST: /Profile/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
@@ -101,14 +107,14 @@ namespace WebDjProject.Controllers
         }
 
         //
-        // GET: /Manage/SetPassword
+        // GET: /Profile/SetPassword
         public ActionResult SetPassword()
         {
             return View();
         }
 
         //
-        // POST: /Manage/SetPassword
+        // POST: /Profile/SetPassword
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SetPassword(SetPasswordViewModel model)
@@ -130,6 +136,34 @@ namespace WebDjProject.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        // GET: Profile/Privatize
+        public ActionResult Privatize()
+        {
+            var id = User.Identity.GetUserId();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ApplicationUser user = db.Users.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+
+        // POST: Profile/Privatize
+        [HttpPost, ActionName("Privatize")]
+        [ValidateAntiForgeryToken]
+        public ActionResult PrivatizeConfirmed()
+        {
+            var id = User.Identity.GetUserId();
+            ApplicationUser user = db.Users.Find(id);
+            user.PrivateStatus = true;
+            db.SaveChanges();
+            return RedirectToAction("Index", new { Message = ManageMessageId.PrivatizeSuccess });
         }
 
         protected override void Dispose(bool disposing)
@@ -166,6 +200,7 @@ namespace WebDjProject.Controllers
         {
             ChangePasswordSuccess,
             SetPasswordSuccess,
+            PrivatizeSuccess,
             Error
         }
     }

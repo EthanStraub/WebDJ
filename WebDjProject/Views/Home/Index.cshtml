@@ -25,6 +25,7 @@
     <!--<input id="toggle" type="button" value="Play/Pause" />-->
     <input id="searchAlbums" type="button" value="Search for albums." />
     <input id="searchArtists" type="button" value="Search for artists." />
+    <input id="searchTracks" type="button" value="Search for songs." />
 
     <table id=resultsTable></table>
 
@@ -104,12 +105,22 @@
     else if (searchArtistBtn.attachEvent)
         searchArtistBtn.attachEvent('onclick', searchArtists);
 
+    var searchTrackBtn = document.getElementById("searchTracks");
+    if (searchTrackBtn.addEventListener)
+        searchTrackBtn.addEventListener("click", searchTracks, false);
+    else if (searchTrackBtn.attachEvent)
+        searchTrackBtn.attachEvent('onclick', searchTracks);
+
     function searchAlbums() {
         spotifyAlbumSearch(document.getElementById('searchInput').value)
     }
 
     function searchArtists() {
         spotifyArtistSearch(document.getElementById('searchInput').value)
+    }
+
+    function searchTracks() {
+        spotifyTrackSearch(document.getElementById('searchInput').value)
     }
 
     var resultsArray = [];
@@ -232,7 +243,53 @@
     }
 
     function spotifyTrackSearch(term) {
+        for (i = 0; i < 20; i++) {
+            $("#resultsTable tr").remove();
+        }
 
+        term = term.replace(" ", "+");
+        $.ajax({
+            url: searchURL + term + "&type=track&market=US",
+            type: "GET",
+            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+            success: function (data) {
+                console.log(data);
+                for (var trackData in data) {
+
+                    var trackItemList = [];
+                    var tracks = data[trackData];
+
+                    for (var item in tracks) {
+                        trackItemList.push(tracks[item]);
+                    }
+
+                    var index = 0;
+
+                    var results = trackItemList[1];
+                    console.log(results);
+                    if (results.length >= 20) {
+                        $.each(results, function (key, val) {
+                            var row = table.insertRow();
+                            index += 1;
+                            row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3><iframe src="https://open.spotify.com/embed/track/' + val.id + '" width="300" height="84" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>'
+                        });
+                    } else if (results.length >= 1 && results.length < 20) {
+                        $.each(results, function (key, val) {
+                            var row = table.insertRow();
+                            index += 1;
+                            row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3><iframe src="https://open.spotify.com/embed/track/' + val.id + '" width="300" height="84" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>'
+                        });
+                        var row = table.insertRow();
+                        row.innerHTML = "No more results...";
+                        return;
+                    } else {
+                        var row = table.insertRow();
+                        row.innerHTML = "No results...";
+                    }
+
+                };
+            }
+        });
     }
    
 

@@ -12,7 +12,7 @@ namespace WebDjProject.Models
     public class Playlist_Song
     {
         [Key]
-        public int Id { get; set; }
+        public int playlistSongJuncId { get; set; }
         [ForeignKey("playlistId")]
         public string playlistId { get; set; }
         [ForeignKey("songId")]

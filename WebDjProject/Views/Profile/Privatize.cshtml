@@ -1,0 +1,28 @@
+﻿@model WebDjProject.Models.ApplicationUser
+@{
+    ViewBag.Title = "Privatize";
+}
+
+@if (!Model.PrivateStatus)
+{
+    <h2>Make your account private.</h2>
+    <p>Are you sure you want to make your account private?</p>
+    <p>Other users will no longer be able to view your playlists...</p>
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Privatize" class="btn btn-default" /> |
+            @Html.ActionLink("Back to profile", "Index", "Profile")
+        </div>
+    }
+}
+else
+{
+    <h3>You have already made your account private.</h3>
+    <h3>No further action is needed on your end.</h3>
+    <div class="form-actions no-color">
+        @Html.ActionLink("Back to profile", "Index", "Profile")
+    </div>
+}

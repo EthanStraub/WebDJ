@@ -85,6 +85,8 @@ namespace WebDjProject.Models
         [Display(Name = "Profile Image")]
         public byte[] UserPhoto { get; set; }
 
+        public bool PrivateStatus { get; set; }
+
         //outdated
         //[Required]
         //[Display(Name = "User Role")]

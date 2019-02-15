@@ -1,4 +1,5 @@
 ﻿@model WebDjProject.Models.IndexViewModel
+
 @{
     ViewBag.Title = "Profile";
 }
@@ -22,6 +23,10 @@
                 @Html.ActionLink("Create", "SetPassword")
             }
             ]
+        </dd>
+        <dt>Make account private</dt>
+        <dd>
+            [ @Html.ActionLink("Privatize", "Privatize") ]
         </dd>
     </dl>
 </div>

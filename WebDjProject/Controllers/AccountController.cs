@@ -171,10 +171,10 @@ namespace WebDjProject.Controllers
 
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
 
-                //Add user to registered user role
+                //Add user to registered user role using user store and user manager
                 var userStore = new UserStore<ApplicationUser>(context);
                 var userManager = new UserManager<ApplicationUser>(userStore);
-
+                
                 //Here we pass the byte array to user context to store in db
                 user.UserPhoto = imageData;
 
@@ -183,6 +183,7 @@ namespace WebDjProject.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     userManager.AddToRole(user.Id, "RegisteredUser");
+                    user.PrivateStatus = false;
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771  Jump ;            
 
                     return RedirectToAction("Index", "Home");

@@ -57,7 +57,7 @@ namespace WebDjProject
                 }
             }
 
-            // creating Creating Manager role    
+            // creating Creating Registered User role    
             if (!roleManager.RoleExists("RegisteredUser"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
@@ -66,7 +66,7 @@ namespace WebDjProject
 
             }
 
-            // creating Creating Employee role    
+            // creating Creating Premium User role    
             if (!roleManager.RoleExists("PremiumUser"))
             {
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
