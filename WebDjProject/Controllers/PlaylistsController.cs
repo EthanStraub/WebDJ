@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using WebDjProject.Models;
@@ -56,7 +57,6 @@ namespace WebDjProject.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
             ViewBag.ApplicationUserId = new SelectList(db.Users, "Id", "Email", playlist.ApplicationUserId);
             return View(playlist);
         }

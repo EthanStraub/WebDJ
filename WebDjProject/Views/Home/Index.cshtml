@@ -26,6 +26,8 @@
     <input id="searchAlbums" type="button" value="Search for albums." />
     <input id="searchArtists" type="button" value="Search for artists." />
     <input id="searchTracks" type="button" value="Search for songs." />
+    <input id="getId" type="button" value="DEBUG: Get user id" />
+    <input id="createPlaylist" type="button" value="DEBUG: Make empty playlist" />
 
     <table id=resultsTable></table>
 
@@ -111,6 +113,18 @@
     else if (searchTrackBtn.attachEvent)
         searchTrackBtn.attachEvent('onclick', searchTracks);
 
+    var getIdBtn = document.getElementById("getId");
+    if (getIdBtn.addEventListener)
+        getIdBtn.addEventListener("click", getId, false);
+    else if (getIdBtn.attachEvent)
+        getIdBtn.attachEvent('onclick', getId);
+
+    var createPlaylistBtn = document.getElementById("createPlaylist");
+    if (createPlaylistBtn.addEventListener)
+        createPlaylistBtn.addEventListener("click", createPlaylist, false);
+    else if (createPlaylistBtn.attachEvent)
+        createPlaylistBtn.attachEvent('onclick', createPlaylist);
+
     function searchAlbums() {
         spotifyAlbumSearch(document.getElementById('searchInput').value)
     }
@@ -121,6 +135,14 @@
 
     function searchTracks() {
         spotifyTrackSearch(document.getElementById('searchInput').value)
+    }
+
+    function getId() {
+        spotifyGetUserId();
+    }
+
+    function createPlaylist() {
+        spotifyMakeEmptyPlaylist()
     }
 
     var resultsArray = [];
@@ -291,6 +313,38 @@
             }
         });
     }
-   
+
+    function spotifyGetUserId() {
+        $.ajax({
+            url: "https://api.spotify.com/v1/me",
+            type: "GET",
+            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+            success: function (data) {
+                console.log(data.id);
+                return data.id;
+            }
+        });
+    }
+
+    function spotifyMakeEmptyPlaylist() {
+        var myData = JSON.stringify({ name: "test", public: true });
+
+        $.ajax({
+            url: 'https://api.spotify.com/v1/me/playlists',
+            method: "POST",
+            headers: {
+                'Authorization': 'Bearer ' + _token,
+                'Content-Type': 'application/json'
+            },
+            data: myData,
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (response) {
+                console.log(response);
+                console.log("ERROR");
+            }
+        });
+    }
 
 </script>
