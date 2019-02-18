@@ -16,8 +16,8 @@
         <hr />
         <div class="form-group">
             @Html.LabelFor(model => model.playlistName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div id="nameInput" class="col-md-10">
-                @Html.EditorFor(model => model.playlistName, new { htmlAttributes = new { @class = "form-control", @id = "nameInput"} })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.playlistName, new { htmlAttributes = new { @class = "form-control", @id = "nameInput" } })
                 @Html.ValidationMessageFor(model => model.playlistName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -28,6 +28,7 @@
             </div>
         </div>
     </div>
+    @Html.HiddenFor(model => model.spotifyPlaylistID, new { id = "hiddenPlaylistID" })
 }
 
 <div>
@@ -92,8 +93,7 @@
         createPlaylistBtn.attachEvent('onclick', createPlaylist);
 
     function createPlaylist() {
-        inputedName = this.form[1].value;
-        console.log("Breakpoint!");
+        var inputedName = document.getElementById("nameInput").form[1].value;
         spotifyMakeEmptyPlaylist(inputedName)
     }
 
@@ -111,22 +111,13 @@
             data: myData,
             success: function (response) {
                 console.log(response);
+
+                playlistId = response.id;
+                document.getElementById("hiddenPlaylistID").value = playlistId
             },
             error: function (response) {
                 console.log(response);
                 console.log("ERROR");
-            }
-        });
-    }
-
-    function spotifyGetUserId() {
-        $.ajax({
-            url: "https://api.spotify.com/v1/me",
-            type: "GET",
-            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
-            success: function (data) {
-                console.log(data.id);
-                return data.id;
             }
         });
     }

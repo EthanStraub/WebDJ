@@ -37,6 +37,11 @@
 
     </dl>
 </div>
+
+<p>
+    <iframe src="https://open.spotify.com/embed/user/@Model.ApplicationUserId/playlist/@Model.spotifyPlaylistID" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+</p>
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.playlistId }) |
     @Html.ActionLink("Back to List", "Index")

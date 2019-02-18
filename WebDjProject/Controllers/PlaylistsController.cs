@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -53,7 +54,12 @@ namespace WebDjProject.Controllers
         {
             if (ModelState.IsValid)
             {
+                ViewBag.playlistName = playlist.playlistName;
+                
                 db.Playlists.Add(playlist);
+                
+                playlist.ApplicationUserId = User.Identity.GetUserId();
+                
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
