@@ -23,23 +23,139 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.playlistName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.songCount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.spotifyPlaylistID)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.playlistId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.playlistId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.playlistId })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.playlistName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.songCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.spotifyPlaylistID)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.playlistId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.playlistId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.playlistId })
+            </td>
+        </tr>
+    }
 
 </table>
+
+<input id="sync" type="button" value="DEBUG: Sync db with spotify" /><br />
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+
+    // Get the hash of the url
+    var hash = window.location.hash
+        .substring(1)
+        .split('&')
+        .reduce(function (initial, item) {
+            if (item) {
+                var parts = item.split('=');
+                initial[parts[0]] = decodeURIComponent(parts[1]);
+            }
+            return initial;
+        }, {});
+    window.location.hash = '';
+
+    // Set token
+    let _token = hash.access_token;
+
+    const authEndpoint = 'https://accounts.spotify.com/authorize';
+    const refreshEndpoint = 'https://accounts.spotify.com/api/token'
+
+    // Replace with your app's client ID, redirect URI and desired scopes
+    const clientId = 'ddb6bd84d33c42aba1450a177ca0f23e';
+    const redirectUri = 'http://localhost:53881/Playlists/';
+    const clientSecret = 'd2e2b989c762414c88b6c3121dd44a65';
+
+    const scopes = [
+        'playlist-read-private',
+        'user-modify-playback-state',
+        'user-read-recently-played',
+        'user-read-currently-playing',
+        'playlist-modify-private',
+        'app-remote-control',
+        'playlist-modify-public',
+        'user-read-birthdate',
+        'user-read-playback-state',
+        'user-read-email',
+        'streaming',
+        'user-read-private',
+        'user-top-read',
+        'app-remote-control'
+    ];
+
+    // If there is no token, redirect to Spotify authorization
+    if (!_token) {
+        window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=false`
+    }
+
+    //gets called twice??
+    console.log('creation');
+
+    var syncBtn = document.getElementById("sync");
+    if (syncBtn.addEventListener)
+        syncBtn.addEventListener("click", spotifySync, false);
+    else if (syncBtn.attachEvent)
+        syncBtn.attachEvent('onclick', spotifySync);
+
+    function spotifySync() {
+        @foreach (var item in Model)
+        {
+        <text>
+        var inputedName = '@item.playlistName';
+        var inputedId = '@item.spotifyPlaylistID';
+        var token = _token
+        console.log(token);
+        spotifyNameSync(inputedName, inputedId, token);
+        </text>
+        }
+    }
+
+        
+    function spotifyNameSync(playlistName,playlistId,authToken) {
+        var myData = JSON.stringify({ name: playlistName, public: true });
+
+        var id = playlistId
+        $.ajax({
+            url: 'https://api.spotify.com/v1/playlists/' + id,
+            method: "PUT",
+            async: true,
+            headers: {
+                'Authorization': 'Bearer ' + authToken,
+                'Content-Type': 'application/json'
+            },
+            //beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + authToken); xhr.setRequestHeader('Content-Type', 'application/json') },
+            data: myData,
+            success: function (response) {
+                //console.log(response);
+            },
+            error: function (response) {
+                //console.log(response);
+                //console.log("ERROR");
+            }
+        });
+    }
+
+    //spotifySync();
+        
+</script>
+
+<script>
+    @foreach (var item in Model)
+    {
+    <text>
+    
+    console.log("test");
+    </text>
+    }
+</script>
+
+
+
