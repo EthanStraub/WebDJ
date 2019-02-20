@@ -19,7 +19,8 @@ namespace WebDjProject.Controllers
         // GET: Playlists
         public ActionResult Index()
         {
-            var playlists = db.Playlists.Include(p => p.ApplicationUser);
+            string userId = User.Identity.GetUserId();
+            var playlists = db.Playlists.Where(p => p.ApplicationUserId == userId);
             return View(playlists.ToList());
         }
 
@@ -41,8 +42,22 @@ namespace WebDjProject.Controllers
         // GET: Playlists/Create
         public ActionResult Create()
         {
-            ViewBag.ApplicationUserId = new SelectList(db.Users, "Id", "Email");
-            return View();
+            string userId = User.Identity.GetUserId();
+            var playlists = db.Playlists.Where(p => p.ApplicationUserId == userId);
+            var playlistSequence = playlists.ToList();
+            if (User.IsInRole("PremiumUser") == false && playlistSequence.Count >= 3)
+            {
+                return RedirectToAction("Index", "Playlists");
+            }
+            else if(User.IsInRole("PremiumUser") == true && playlistSequence.Count >= 5)
+            {
+                return RedirectToAction("Index", "Playlists");
+            }
+            else
+            {
+                ViewBag.ApplicationUserId = new SelectList(db.Users, "Id", "Email");
+                return View();
+            }
         }
 
         // POST: Playlists/Create
@@ -124,6 +139,13 @@ namespace WebDjProject.Controllers
             db.Playlists.Remove(playlist);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Search()
+        {
+            string userId = User.Identity.GetUserId();
+            var playlists = db.Playlists.Where(p => p.ApplicationUserId == userId);
+            return View(playlists.ToList());
         }
 
         protected override void Dispose(bool disposing)

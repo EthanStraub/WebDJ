@@ -5,12 +5,20 @@
     {
     @Html.AntiForgeryToken()
 
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Profile", "Index", "Profile", routeValues: null, htmlAttributes: new { title = "Profile" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-    </ul>
+<ul class="nav navbar-nav navbar-right">
+    <li>
+        @Html.ActionLink("Profile", "Index", "Profile", routeValues: null, htmlAttributes: new { title = "Profile" })
+    </li>
+    <li>
+        @Html.ActionLink("Search for songs", "Search", "Playlists")
+    </li>
+    <li>
+        @Html.ActionLink("View playlists", "Index", "Playlists")
+    </li>
+    <li>
+        <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+    </li>
+</ul>
     }
 }
 else

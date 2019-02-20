@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Playlists</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -45,7 +45,7 @@
 
 </table>
 
-<input id="sync" type="button" value="DEBUG: Sync db with spotify" /><br />
+<!--<input id="sync" type="button" value="DEBUG: Sync db with spotify" /><br />-->
 
 <script src="~/Scripts/jquery-3.3.1.js"></script>
 <script type="text/javascript">
@@ -99,11 +99,13 @@
     //gets called twice??
     console.log('creation');
 
-    var syncBtn = document.getElementById("sync");
-    if (syncBtn.addEventListener)
-        syncBtn.addEventListener("click", spotifySync, false);
-    else if (syncBtn.attachEvent)
-        syncBtn.attachEvent('onclick', spotifySync);
+    //button assignment for debugging purposes
+
+    //var syncBtn = document.getElementById("sync");
+    //if (syncBtn.addEventListener)
+    //    syncBtn.addEventListener("click", spotifySync, false);
+    //else if (syncBtn.attachEvent)
+    //    syncBtn.attachEvent('onclick', spotifySync);
 
     function spotifySync() {
         @foreach (var item in Model)
@@ -112,13 +114,13 @@
         var inputedName = '@item.playlistName';
         var inputedId = '@item.spotifyPlaylistID';
         var token = _token
-        console.log(token);
+        //console.log(token);
         spotifyNameSync(inputedName, inputedId, token);
         </text>
         }
     }
 
-        
+
     function spotifyNameSync(playlistName,playlistId,authToken) {
         var myData = JSON.stringify({ name: playlistName, public: true });
 
@@ -133,29 +135,16 @@
             },
             //beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + authToken); xhr.setRequestHeader('Content-Type', 'application/json') },
             data: myData,
-            success: function (response) {
-                //console.log(response);
+            success: function () {
+                console.log("Playlist changed");
             },
-            error: function (response) {
-                //console.log(response);
-                //console.log("ERROR");
+            error: function () {
+                console.log("ERROR");
             }
         });
     }
 
-    //spotifySync();
-        
+    spotifySync();
+
 </script>
-
-<script>
-    @foreach (var item in Model)
-    {
-    <text>
-    
-    console.log("test");
-    </text>
-    }
-</script>
-
-
 

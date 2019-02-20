@@ -264,6 +264,7 @@
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Profile\SetPassword.cshtml" />
     <Content Include="Views\Profile\Privatize.cshtml" />
+    <Content Include="Views\Playlists\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
