@@ -6,10 +6,6 @@
 
 <h2>Search</h2>
 
-
-
-
-
 <div class="inputBox">
     <input id="searchInput" name="term" value="">
 </div>
@@ -38,9 +34,16 @@
     </tr>
 </table>
 
+<div class="jumbotron">
+    <table id=resultsTable>
+        <tr>
+            <td>
+                <h5>This is where your search results will appear. A maximum of 20 results are displayed.</h5>
+            </td>
+        </tr>
+    </table>
+</div>
 
-
-<table id=resultsTable></table>
 
 
 
@@ -148,7 +151,7 @@
     //ALBUMS
     function spotifyAlbumSearch(term) {
 
-        for (i = 0; i < 20; i++) {
+        for (i = 0; i < 21; i++) {
             $("#resultsTable tr").remove();
         }
 
@@ -197,7 +200,7 @@
 
     //ARTISTS
     function spotifyArtistSearch(artist) {
-        for (i = 0; i < 20; i++) {
+        for (i = 0; i < 21; i++) {
             $("#resultsTable tr").remove();
         }
 
@@ -246,7 +249,7 @@
 
     //TRACKS
     function spotifyTrackSearch(term) {
-        for (i = 0; i < 20; i++) {
+        for (i = 0; i < 21; i++) {
             $("#resultsTable tr").remove();
         }
 
@@ -379,7 +382,7 @@
 
     //PLAYLISTS
     function spotifyPlaylistSearch(term) {
-        for (i = 0; i < 20; i++) {
+        for (i = 0; i < 21; i++) {
             $("#resultsTable tr").remove();
         }
 

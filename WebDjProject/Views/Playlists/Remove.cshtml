@@ -1,0 +1,281 @@
+﻿@model IEnumerable<WebDjProject.Models.Playlist>
+
+@{
+    ViewBag.Title = "Remove";
+}
+
+<h2>Remove tracks from your playlists.</h2>
+
+<div class="jumbotron">
+  <table id=resultsTable></table>
+</div>
+
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+
+<script type="text/javascript">
+
+    // Reset search box
+
+    // Get the hash of the url
+    const hash = window.location.hash
+        .substring(1)
+        .split('&')
+        .reduce(function (initial, item) {
+            if (item) {
+                var parts = item.split('=');
+                initial[parts[0]] = decodeURIComponent(parts[1]);
+            }
+            return initial;
+        }, {});
+    window.location.hash = '';
+
+    // Set token
+    let _token = hash.access_token;
+
+    const authEndpoint = 'https://accounts.spotify.com/authorize';
+    const refreshEndpoint = 'https://accounts.spotify.com/api/token'
+
+    // Replace with your app's client ID, redirect URI and desired scopes
+    const clientId = 'ddb6bd84d33c42aba1450a177ca0f23e';
+    const redirectUri = 'http://localhost:53881/Playlists/Remove/';
+    const clientSecret = 'd2e2b989c762414c88b6c3121dd44a65';
+
+    const scopes = [
+        'playlist-read-private',
+        'user-modify-playback-state',
+        'user-read-recently-played',
+        'user-read-currently-playing',
+        'playlist-modify-private',
+        'app-remote-control',
+        'playlist-modify-public',
+        'user-read-birthdate',
+        'user-read-playback-state',
+        'user-read-email',
+        'streaming',
+        'user-read-private',
+        'user-top-read',
+        'app-remote-control'
+    ];
+
+    // If there is no token, redirect to Spotify authorization
+    if (!_token) {
+        window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=false`;
+    }
+
+    var resultsArray = [];
+    var dataResults = "";
+    var searchURL = "https://api.spotify.com/v1/search?q=";
+    var table = document.getElementById("resultsTable");
+
+    var btnIndex = 0;
+    var pushedIndex = 0;
+    var displayedTracks = [];
+
+    function pushPlaylistIDs() {
+        var usedPlaylistIDs = [];
+        @foreach(var item in Model)
+        {
+        <text>
+
+        var usedPlaylistID = '@item.spotifyPlaylistID';
+        usedPlaylistIDs.push(usedPlaylistID);
+        
+        </text>
+        }
+        return usedPlaylistIDs;
+    }
+
+    function pushPlaylistNames() {
+        var usedPlaylistNames = [];
+        @foreach(var item in Model)
+        {
+        <text>
+
+        var usedPlaylistName = '@item.playlistName';
+        usedPlaylistNames.push(usedPlaylistName);
+        
+        </text>
+        }
+        return usedPlaylistNames;
+    }
+    
+    function displayPlaylists() {
+
+        for (i = 0; i < 20; i++) {
+            $("#resultsTable tr").remove();
+        }
+        var usedPlaylistIDs = pushPlaylistIDs();
+        var usedPlaylistNames = pushPlaylistNames();
+
+        if (usedPlaylistIDs) {
+            
+            //console.log(usedPlaylistIDs);
+
+            if (_token) {
+
+                btnIndex = 0;
+                pushedIndex = 0;
+
+                for (i = 0; i < usedPlaylistIDs.length; i++) {
+
+                    //console.log(_token);
+
+                    displayedTracks = [];
+
+                    var trackIDNamePairList = getSongs(usedPlaylistIDs[i], _token)
+
+
+                    if ((trackIDNamePairList !== undefined) && trackIDNamePairList.length > 0) {
+
+                        //console.log("Index: " + i);
+
+                        //console.log(trackIDNamePairList);
+                        var nonNullList = trackIDNamePairList;
+                        //console.log(nonNullList);
+                        delayedResponse(nonNullList, usedPlaylistNames[i], usedPlaylistIDs[i]);
+                    }
+
+                    //console.log("Index: " + i);
+                }
+                    
+                //console.log(trackIDNamePairList);
+
+                //delayedResponse(trackIDNamePairList, usedPlaylistNames)
+            }
+
+            //window.setTimeout(delayedResponse, 3000);
+            
+        }
+
+    }
+
+    function delayedResponse(nonNullList, usedPlaylistName, usedPlaylistID) {
+        //console.log("TEST");
+        var nameRow = table.insertRow();
+        nameRow.innerHTML = "<br /><br /><h2>" + usedPlaylistName + "</h2><br />"
+
+        for (j = 1; j < (nonNullList.length / 2) + 1; j++) {
+
+            btnIndex += 1
+            pushedIndex += 1
+
+            var trackIndex = 0;
+            var btnId = "addTrack" + btnIndex.toString();
+
+            var trackRow1 = table.insertRow();
+            var trackRow2 = table.insertRow();
+            var buttonRow = table.insertRow();
+
+            var displayedTrackName = nonNullList[j * 2 - 2]
+            var displayedTrackID = nonNullList[j * 2 - 1]
+            //console.log(nonNullList[i * 2 - 1]);
+            //console.log(nonNullList[i * 2]);
+            trackRow1.innerHTML = "<br /><h5>" + displayedTrackName + "</h5>"
+            trackRow2.innerHTML = "<dl><dt> ID: " + displayedTrackID + "</dt></dl>"
+            
+            buttonRow.innerHTML = '<input id="' + btnId + '" type="button" class="btn btn-danger" value="Remove" /><br />';
+
+
+            //var addressedIndex = (btnIndex + 2) % numOfLists;
+            //console.log(addressedIndex);
+            //console.log(btnId);
+
+            pushedTrackID = displayedTrackID.toString() + "_" + pushedIndex.toString();
+
+            displayedTracks.push(pushedTrackID);
+
+            trackIndex = displayedTracks.indexOf(pushedTrackID)
+            
+            var delTrackBtn = document.getElementById(btnId);
+            if (delTrackBtn.addEventListener)
+                delTrackBtn.addEventListener("click", delTrack, false);
+            else if (delTrackBtn.attachEvent)
+                delTrackBtn.attachEvent('onclick', delTrack);
+            
+            
+
+
+            function delTrack() {
+                //console.log(usedPlaylistID);
+                console.log(trackIndex);
+                //console.log(displayedTrackID);
+                //console.log(_token);
+                spotifyRemoveTrack(usedPlaylistID, displayedTrackID, trackIndex, _token)
+            }
+
+            
+        }
+    }
+
+    function getSongs(playlistId, authToken) {
+        var id = playlistId;
+
+        var trackIDandNameList = [];
+
+
+        $.ajax({
+            url: 'https://api.spotify.com/v1/playlists/' + id + '/tracks',
+            method: "GET",
+            async: false,
+            headers: {
+                'Authorization': 'Bearer ' + authToken,
+                'Content-Type': 'application/json'
+            },
+            success: function (response) {
+
+
+                for (k = 0; k < response.items.length; k++) {
+                    //console.log(response.items[i].track.id);
+                    //console.log(response.items[i].track.name);
+                    trackIDandNameList.push(response.items[k].track.name);
+                    trackIDandNameList.push(response.items[k].track.id);
+                }
+
+                //console.log('1');
+                //console.log(response);
+                //console.log('2');
+                //console.log('PlistID_' + id);
+                //document.getElementById('PlistID_' + id).value = 7;
+                //console.log(document.getElementById('PlistID_' + id));
+                
+            },
+            error: function (response) {
+                //console.log(response);
+            }
+        });
+        //console.log(trackIDandNameList);
+        //console.log(_token);
+        return trackIDandNameList;
+    }
+
+
+
+    function spotifyRemoveTrack(playlistID, trackID, trackPos, authToken) {
+        var myData = JSON.stringify({ "tracks": [{ "uri": "spotify:track:" + trackID, "positions": [trackPos] }] });
+        $.ajax({
+            url: 'https://api.spotify.com/v1/playlists/' + playlistID + '/tracks',
+            method: "DELETE",
+            async: true,
+            data: myData,
+            headers: {
+                'Authorization': 'Bearer ' + authToken,
+                'Content-Type': 'application/json'
+            },
+            success: function (response) {
+                location.reload(true); 
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+    }
+
+    
+    //getSongs('7oFCgqPhLW39EHcoMnIdXX', _token);
+    //spotifyRemoveTrack('7oFCgqPhLW39EHcoMnIdXX','53NkOWxyBmjUKHl30A8l9S',4, _token)
+    displayPlaylists()
+</script>

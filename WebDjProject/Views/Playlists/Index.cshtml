@@ -1,15 +1,17 @@
 ﻿@model IEnumerable<WebDjProject.Models.Playlist>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Playlists";
 }
 
 <h2>Playlists</h2>
 
+
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New Playlist", "Create")
 </p>
-<table class="table">
+
+<table class="table table-hover">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.playlistName)
@@ -36,9 +38,10 @@
                 @Html.DisplayFor(modelItem => item.spotifyPlaylistID)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.playlistId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.playlistId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.playlistId })
+                @Html.ActionLink("Edit name", "Edit", new { id = item.playlistId }) |
+                @Html.ActionLink("Listen", "Details", new { id = item.playlistId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.playlistId }) |
+                @Html.ActionLink("Remove songs", "Remove")
             </td>
         </tr>
     }

@@ -148,6 +148,13 @@ namespace WebDjProject.Controllers
             return View(playlists.ToList());
         }
 
+        public ActionResult Remove()
+        {
+            string userId = User.Identity.GetUserId();
+            var playlists = db.Playlists.Where(p => p.ApplicationUserId == userId);
+            return View(playlists.ToList());
+        }
+
         [HttpPost, ActionName("UpdateSongCount")]
         public ActionResult UpdateSongCount(Playlist playlist)
         {
