@@ -15,10 +15,28 @@
 </div>
 
 <!--<input id="toggle" type="button" value="Play/Pause" />-->
-<input id="searchAlbums" type="button" class="btn btn-secondary" value="Search for albums." /><br />
-<input id="searchArtists" type="button" class="btn btn-secondary" value="Search for artists." /><br />
-<input id="searchTracks" type="button" class="btn btn-secondary" value="Search for songs by title." /><br />
-<input id="searchSpotifyPlaylists" class="btn btn-secondary" type="button" value="Search for playlists on Spotify" /><br />
+<table>
+    <tr>
+        <td>
+            <input id="searchTracks" type="button" class="btn btn-secondary" value="Search for songs." />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input id="searchAlbums" type="button" class="btn btn-secondary" value="Search for albums." />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input id="searchArtists" type="button" class="btn btn-secondary" value="Search for artists." />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input id="searchSpotifyPlaylists" class="btn btn-secondary" type="button" value="Search for playlists on Spotify" />
+        </td>
+    </tr>
+</table>
 
 
 
@@ -103,7 +121,7 @@
     else if (searchSpotifyPlaylistsBtn.attachEvent)
         searchSpotifyPlaylistsBtn.attachEvent('onclick', searchSpotifyPlaylists);
 
-    
+
 
     function searchAlbums() {
         spotifyAlbumSearch(document.getElementById('searchInput').value)
@@ -154,35 +172,22 @@
                     var index = 0;
 
                     var results = albumItemList[1];
-                    console.log(results);
-                    if (results.length >= 20) {
+                    //console.log(results);
+                    if (results.length >= 1) {
                         $.each(results, function (key, val) {
                             var row = table.insertRow();
                             index += 1
                             row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3><iframe src="https://open.spotify.com/embed/album/' + val.id + '" width="300" height="300" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>'
                         });
-                    } else if (results.length >= 1 && results.length < 20) {
-                        $.each(results, function (key, val) {
-
-                            //test case -- John Maus
-                            var artistItemList = [];
-                            var artistData = val.artists;
-                            for (var item in artistData) {
-                                artistItemList.push(artistData[item[0]].name);
-                            }
-                            console.log(artistItemList);
-
-
-                            var row = table.insertRow();
-                            index += 1
-                            row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3><iframe src="https://open.spotify.com/embed/album/' + val.id + '" width="300" height="300" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>'
-                        });
-                        var row = table.insertRow();
-                        row.innerHTML = "No more results...";
-                        return;
-                    } else {
-                        var row = table.insertRow();
-                        row.innerHTML = "No results...";
+                        if (results.length < 20) {
+                            var noMoreRow = table.insertRow();
+                            noMoreRow.innerHTML = "<h3>No more results...</h3>";
+                            return;
+                        }
+                    }
+                    else {
+                        var noResultsRow = table.insertRow();
+                        noResultsRow.innerHTML = "<h3>No results...</h3>";
                     }
 
                 };
@@ -216,25 +221,22 @@
                     var index = 0;
 
                     var results = artistItemList[1];
-                    console.log(results);
-                    if (results.length >= 20) {
+                    //console.log(results);
+                    if (results.length >= 1) {
                         $.each(results, function (key, val) {
                             var row = table.insertRow();
                             index += 1;
                             row.innerHTML = '<h4><a href="https://open.spotify.com/artist/' + val.id + '" target = "_blank">' + index + '. ' + val.name + '<a></h4>' + '<img src="' + val.images[1].url + '" height=300px width=300px>' + '<br />'
                         });
-                    } else if (results.length >= 1 && results.length < 20) {
-                        $.each(results, function (key, val) {
-                            var row = table.insertRow();
-                            index += 1;
-                            row.innerHTML = '<h4><a href="https://open.spotify.com/artist/' + val.id + '" target = "_blank">' + index + '. ' + val.name + '<a></h4>' + '<img src="' + val.images[1].url + '" height=300px width=300px>' + '<br />'
-                        });
-                        var row = table.insertRow();
-                        row.innerHTML = "<h3>No more results...<h3>";
-                        return;
-                    } else {
-                        var row = table.insertRow();
-                        row.innerHTML = "<h3>No results...<h3>";
+                        if (results.length < 20) {
+                            var noMoreRow = table.insertRow();
+                            noMoreRow.innerHTML = "<h3>No more results...</h3>";
+                            return;
+                        }
+                    }
+                    else {
+                        var noResultsRow = table.insertRow();
+                        noResultsRow.innerHTML = "<h3>No results...</h3>";
                     }
 
                 };
@@ -266,21 +268,14 @@
 
                     var index = 0;
                     var btnIndex = 0
-                    
+
 
                     var results = trackItemList[1];
                     console.log(results);
-                    if (results.length >= 20) {
-                        $.each(results, function (key, val) {
-                            var trackRow = table.insertRow();
-                            var buttonRow = table.insertRow();
-                            index += 1;
-                            trackRow.innerHTML = '<h3>' + index + '. ' + val.name + '</h3><iframe src="https://open.spotify.com/embed/track/' + val.id + '" width="300" height="84" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>';
+                    if (results.length >= 1) {
 
-                        });
-                    } else if (results.length >= 1 && results.length < 20) {
-
-                        var playlistList = pushPlaylists();
+                        var playlistIDList = pushPlaylistIDs();
+                        var playlistNameList = pushPlaylistNames();
 
                         $.each(results, function (key, val) {
 
@@ -288,104 +283,95 @@
                             index += 1;
                             trackRow.innerHTML = '<h3>' + index + '. ' + val.name + '</h3><iframe src="https://open.spotify.com/embed/track/' + val.id + '" width="300" height="84" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe><br/>';
 
-                            @foreach (var item in Model)
-                            {
-                            <text>
+                            for (i = 0; i < playlistIDList.length; i++) {
+                                btnIndex += 1
+                                var btnId = "addTrack" + btnIndex.toString();
+                                var buttonRow = table.insertRow();
+                                buttonRow.innerHTML = '<td><input id="' + btnId + '" type="button" class="btn btn-secondary" value="Add track to ' + playlistNameList[i] + '" /></td><br/>';
 
-                            btnIndex += 1
-                            var btnId = "addTrack" + btnIndex.toString();
-                            var buttonRow = table.insertRow();
-                            buttonRow.innerHTML = '<td><input id="' + btnId + '" type="button" class="btn btn-secondary" value="Add track to @item.playlistName" /></td><br/>';
+                                var addressedIndex = (btnIndex + 2) % playlistIDList.length;
+                                //console.log(addressedIndex);
 
-                            var addressedIndex = (btnIndex + 2) % playlistList.length;
-                            console.log(addressedIndex);
 
-                            
-                            switch (addressedIndex) {
-                                case 0:
-                                    var addTrackBtn = document.getElementById(btnId);
-                                    if (addTrackBtn.addEventListener)
-                                        addTrackBtn.addEventListener("click", addTrackOne, false);
-                                    else if (addTrackBtn.attachEvent)
-                                        addTrackBtn.attachEvent('onclick', addTrackOne);
-                                    break;
-                                case 1:
-                                    var addTrackBtn = document.getElementById(btnId);
-                                    if (addTrackBtn.addEventListener)
-                                        addTrackBtn.addEventListener("click", addTrackTwo, false);
-                                    else if (addTrackBtn.attachEvent)
-                                        addTrackBtn.attachEvent('onclick', addTrackTwo);
-                                    break;
-                                case 2:
-                                    var addTrackBtn = document.getElementById(btnId);
-                                    if (addTrackBtn.addEventListener)
-                                        addTrackBtn.addEventListener("click", addTrackThree, false);
-                                    else if (addTrackBtn.attachEvent)
-                                        addTrackBtn.attachEvent('onclick', addTrackThree);
-                                    break;
-                                case 3:
-                                    var addTrackBtn = document.getElementById(btnId);
-                                    if (addTrackBtn.addEventListener)
-                                        addTrackBtn.addEventListener("click", addTrackFour, false);
-                                    else if (addTrackBtn.attachEvent)
-                                        addTrackBtn.attachEvent('onclick', addTrackFour);
-                                    break;
-                                case 4:
-                                    var addTrackBtn = document.getElementById(btnId);
-                                    if (addTrackBtn.addEventListener)
-                                        addTrackBtn.addEventListener("click", addTrackFive, false);
-                                    else if (addTrackBtn.attachEvent)
-                                        addTrackBtn.attachEvent('onclick', addTrackFive);
-                                    break;
-                                
-                            }
-                            
-                            
-                            
+                                switch (addressedIndex) {
+                                    case 0:
+                                        var addTrackBtn = document.getElementById(btnId);
+                                        if (addTrackBtn.addEventListener)
+                                            addTrackBtn.addEventListener("click", addTrackOne, false);
+                                        else if (addTrackBtn.attachEvent)
+                                            addTrackBtn.attachEvent('onclick', addTrackOne);
+                                        break;
+                                    case 1:
+                                        var addTrackBtn = document.getElementById(btnId);
+                                        if (addTrackBtn.addEventListener)
+                                            addTrackBtn.addEventListener("click", addTrackTwo, false);
+                                        else if (addTrackBtn.attachEvent)
+                                            addTrackBtn.attachEvent('onclick', addTrackTwo);
+                                        break;
+                                    case 2:
+                                        var addTrackBtn = document.getElementById(btnId);
+                                        if (addTrackBtn.addEventListener)
+                                            addTrackBtn.addEventListener("click", addTrackThree, false);
+                                        else if (addTrackBtn.attachEvent)
+                                            addTrackBtn.attachEvent('onclick', addTrackThree);
+                                        break;
+                                    case 3:
+                                        var addTrackBtn = document.getElementById(btnId);
+                                        if (addTrackBtn.addEventListener)
+                                            addTrackBtn.addEventListener("click", addTrackFour, false);
+                                        else if (addTrackBtn.attachEvent)
+                                            addTrackBtn.attachEvent('onclick', addTrackFour);
+                                        break;
+                                    case 4:
+                                        var addTrackBtn = document.getElementById(btnId);
+                                        if (addTrackBtn.addEventListener)
+                                            addTrackBtn.addEventListener("click", addTrackFive, false);
+                                        else if (addTrackBtn.attachEvent)
+                                            addTrackBtn.attachEvent('onclick', addTrackFive);
+                                        break;
+
+                                }
 
                             //console.log("DEBUG");
-
-                            </text>
                             }
 
                             var usedTrack = val.id;
 
-                            
-
                             function addTrackOne() {
-                                spotifyAddTrackToPlaylist(usedTrack, playlistList[0])
+                                spotifyAddTrackToPlaylist(usedTrack, playlistIDList[0])
                             }
 
                             function addTrackTwo() {
-                                spotifyAddTrackToPlaylist(usedTrack, playlistList[1])
+                                spotifyAddTrackToPlaylist(usedTrack, playlistIDList[1])
                             }
 
                             function addTrackThree() {
-                                spotifyAddTrackToPlaylist(usedTrack, playlistList[2])
+                                spotifyAddTrackToPlaylist(usedTrack, playlistIDList[2])
                             }
 
                             //Premium user feature
                             function addTrackFour() {
-                                spotifyAddTrackToPlaylist(usedTrack, playlistList[3])
+                                spotifyAddTrackToPlaylist(usedTrack, playlistIDList[3])
                             }
 
                             function addTrackFive() {
-                                spotifyAddTrackToPlaylist(usedTrack, playlistList[4])
+                                spotifyAddTrackToPlaylist(usedTrack, playlistIDList[4])
                             }
 
                             //console.log("TEST");
 
                         });
 
-
-                        var row = table.insertRow();
-                        row.innerHTML = "No more results...";
-                        return;
-                    } else {
-                        var row = table.insertRow();
-                        row.innerHTML = "No results...";
+                        if (results.length < 20) {
+                            var noMoreRow = table.insertRow();
+                            noMoreRow.innerHTML = "<h3>No more results...</h3>";
+                            return;
+                        }
                     }
-
+                    else {
+                        var noResultsRow = table.insertRow();
+                        noResultsRow.innerHTML = "<h3>No results...</h3>";
+                    }
                 };
             }
         });
@@ -417,35 +403,22 @@
                     var index = 0;
 
                     var results = playlistItemList[1];
-                    console.log(results);
-                    if (results.length >= 20) {
+                    //console.log(results);
+                    if (results.length >= 1) {
                         $.each(results, function (key, val) {
                             var row = table.insertRow();
                             index += 1
                             row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3><iframe src="https://open.spotify.com/embed/playlist/' + val.id + '" width="300" height="300" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>'
                         });
-                    } else if (results.length >= 1 && results.length < 20) {
-                        $.each(results, function (key, val) {
-
-                            //test case -- John Maus
-                            var authorItemList = [];
-                            var authorData = val.authors;
-                            for (var item in authorData) {
-                                authorItemList.push(authorData[item[0]].name);
-                            }
-                            console.log(authorItemList);
-
-
-                            var row = table.insertRow();
-                            index += 1
-                            row.innerHTML = '<h3>' + index + '. ' + val.name + '</h3><iframe src="https://open.spotify.com/embed/playlist/' + val.id + '" width="300" height="300" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>'
-                        });
-                        var row = table.insertRow();
-                        row.innerHTML = "No more results...";
-                        return;
-                    } else {
-                        var row = table.insertRow();
-                        row.innerHTML = "No results...";
+                        if (results.length < 20) {
+                            var noMoreRow = table.insertRow();
+                            noMoreRow.innerHTML = "<h3>No more results...</h3>";
+                            return;
+                        }
+                    }
+                    else {
+                        var noResultsRow = table.insertRow();
+                        noResultsRow.innerHTML = "<h3>No results...</h3>";
                     }
 
                 };
@@ -474,6 +447,7 @@
     }
 
 
+
     function spotifyGetUserId() {
         $.ajax({
             url: "https://api.spotify.com/v1/me",
@@ -486,21 +460,73 @@
         });
     }
 
-    function pushPlaylists() {
-        var usedPlaylists = [];
+    function pushPlaylistIDs() {
+        var usedPlaylistIDs = [];
         @foreach(var item in Model)
         {
         <text>
-        var usedPlaylistID = '@item.spotifyPlaylistID';
-        usedPlaylists.push(usedPlaylistID);
+        var sCount = '@item.songCount'
+        var pStatus = premiumCheck();
+
+        if (pStatus == false && sCount >= 20) {
+            console.log("PLAYLIST '@item.playlistName' IS FULL");
+        }
+        else
+        {
+            
+            var usedPlaylistID = '@item.spotifyPlaylistID';
+            usedPlaylistIDs.push(usedPlaylistID);
+        }
+        
         </text>
         }
-        return usedPlaylists;
+        return usedPlaylistIDs;
+    }
+
+    function pushPlaylistNames() {
+        var usedPlaylistNames = [];
+        @foreach(var item in Model)
+        {
+        <text>
+        var sCount = '@item.songCount'
+        var pStatus = '@User.IsInRole("PremiumUser")'
+
+        console.log("TEST1");
+        if (pStatus == false && sCount >= 20) {
+            console.log("PLAYLIST '@item.playlistName' IS FULL");
+        }
+        else
+        {
+            
+            var usedPlaylistName = '@item.playlistName';
+            usedPlaylistNames.push(usedPlaylistName);
+        }
+        console.log("TEST2");
+        
+        </text>
+        }
+        return usedPlaylistNames;
+    }
+
+    function premiumCheck() {
+        var status1 = '@User.IsInRole("RegisteredUser")'
+        var status2 = '@User.IsInRole("PremiumUser")'
+        var status3 = '@User.IsInRole("Admin")'
+
+        if (status2 == "False") {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
     //debugging
     //spotifyGetUserId();
     //spotifyAddTrackToPlaylist('2VVI3s5cAGh2YMDmmmEV44', '5T5TP1CtWYKwOiH9zpJH9D');
+    //premiumCheck();
+
+
 
 </script>
 

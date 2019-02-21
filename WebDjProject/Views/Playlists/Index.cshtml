@@ -43,7 +43,13 @@
         </tr>
     }
 
+
 </table>
+
+
+
+
+
 
 <!--<input id="sync" type="button" value="DEBUG: Sync db with spotify" /><br />-->
 
@@ -97,7 +103,7 @@
     }
 
     //gets called twice??
-    console.log('creation');
+    //console.log('creation');
 
     //button assignment for debugging purposes
 
@@ -111,13 +117,41 @@
         @foreach (var item in Model)
         {
         <text>
+
         var inputedName = '@item.playlistName';
         var inputedId = '@item.spotifyPlaylistID';
         var token = _token
         //console.log(token);
         spotifyNameSync(inputedName, inputedId, token);
+        spotifySongCountSync(inputedId, token);
+        var newCount = spotifySongCountSync(inputedId, token);
+
+        //I'm not entirely sure why this is needed here but...
+        //It's the only thing keeping the ajax request functioning.
+        console.log(newCount);
+        
+        var objAjax = new Object();
+        objAjax.songCount = newCount; // Model prop is int type so this value must be int.
+        objAjax.playlistId = '@item.playlistId';
+
+        $.ajax('@Url.Action("UpdateSongCount", "Playlists")', {
+        type: 'POST',
+        data: JSON.stringify(objAjax),
+        contentType: "application/json",
+        async: false,
+        dataType: "json",
+        traditional: true,
+        success: function (returnData) {
+            //console.log(returnData);
+        },
+        error: function () {
+            //console.log("Error!");
+        }
+        });
+
         </text>
         }
+
     }
 
 
@@ -128,7 +162,7 @@
         $.ajax({
             url: 'https://api.spotify.com/v1/playlists/' + id,
             method: "PUT",
-            async: true,
+            async: false,
             headers: {
                 'Authorization': 'Bearer ' + authToken,
                 'Content-Type': 'application/json'
@@ -136,12 +170,42 @@
             //beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + authToken); xhr.setRequestHeader('Content-Type', 'application/json') },
             data: myData,
             success: function () {
-                console.log("Playlist changed");
+                //console.log("Playlist changed");
             },
             error: function () {
-                console.log("ERROR");
+                //console.log("ERROR");
             }
         });
+    }
+
+
+
+    function spotifySongCountSync(playlistId, authToken) {
+        var id = playlistId
+        var playlistSongCount = 0;
+        $.ajax({
+            url: 'https://api.spotify.com/v1/playlists/' + id + '/tracks',
+            method: "GET",
+            async: false,
+            headers: {
+                'Authorization': 'Bearer ' + authToken,
+                'Content-Type': 'application/json'
+            },
+            success: function (response) {
+
+                playlistSongCount = response.items.length;
+                //console.log(playlistSongCount);
+                return playlistSongCount;
+                //console.log('PlistID_' + id);
+                //document.getElementById('PlistID_' + id).value = 7;
+                //console.log(document.getElementById('PlistID_' + id));
+
+            },
+            error: function (response) {
+                //console.log(response);
+            }
+        });
+        return playlistSongCount;
     }
 
     spotifySync();

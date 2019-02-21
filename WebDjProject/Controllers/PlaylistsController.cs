@@ -148,6 +148,17 @@ namespace WebDjProject.Controllers
             return View(playlists.ToList());
         }
 
+        [HttpPost, ActionName("UpdateSongCount")]
+        public ActionResult UpdateSongCount(Playlist playlist)
+        {
+            Playlist oldPlaylist = db.Playlists.Where(p => p.playlistId == playlist.playlistId).Single();
+
+            oldPlaylist.songCount = playlist.songCount;
+            
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
