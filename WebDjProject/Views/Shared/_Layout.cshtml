@@ -19,20 +19,32 @@
             padding: 6px;
             box-shadow: 0px 0px 20px #888;" />
 
-            <h1>
-                @Html.ActionLink("WebDJ", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </h1>
-            
-            <div>
-                <ul>
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+            <hr />
+
+            <div class="bs-component">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        WebDJ
+                    </li>
+                    <li class="breadcrumb-item">
+                        @Html.ActionLink("Home", "Index", "Home")
+                    </li>
+                    <li class="breadcrumb-item">
+                        @Html.ActionLink("About", "About", "Home")
+                    </li>
+                    <li class="breadcrumb-item">
+                        @Html.ActionLink("Contact", "Contact", "Home")
+                    </li>
                     @if (User.IsInRole("Admin"))
                     {
-                        <li>@Html.ActionLink("Users", "Index", "Users")</li>
+                    <li class="breadcrumb-item">
+                        @Html.ActionLink("Users", "Index", "Users")
+                    </li>
                     }
-                </ul>
+                </ol>
+            </div>
+
+            <div>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

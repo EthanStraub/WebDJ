@@ -4,12 +4,30 @@
     ViewBag.Title = "Profile";
 }
 
-<h2>@ViewBag.Title.</h2>
+<h2>@User.Identity.Name</h2>
+
+<img src="@Url.Action("UserPhotos", "Home" )" style="width:300px;height:300px; background: #FFFFFF;
+            margin: auto;
+            -moz-border-radius: 60px;
+            border-radius: 10px;
+            padding: 6px;" />
+
+@if (User.IsInRole("PremiumUser"))
+{
+<h3>★Premium User★</h3>
+}
+
+<br />
+<br />
+
+<form action="@Url.Action("Index", "Playlists")">
+    <input type="submit" class="btn btn-outline-primary" value="View your playlists" />
+</form>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
     <h4>Change your account settings</h4>
-    <hr />
+    
     <dl class="dl-horizontal">
         <dt>Password:</dt>
         <dd>
@@ -24,9 +42,27 @@
             }
             ]
         </dd>
+        <br />
         <dt>Make account private</dt>
         <dd>
             [ @Html.ActionLink("Privatize", "Privatize") ]
         </dd>
+        <br />
+        <dt>Upgrade account to premium status</dt>
+        <dd>
+            <form action="@Url.Action("Index", "Profile")" method="POST">
+                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_test_6cDEXb7U4fVzevejZgaA1gDW"
+                        data-amount="999"
+                        data-name="WebDJ premium services"
+                        data-description="Recurring monthly fee"
+                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                        data-locale="auto">
+                    console.log("TEST");
+                </script>
+            </form>
+        </dd>
     </dl>
 </div>
+
+

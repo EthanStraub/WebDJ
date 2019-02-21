@@ -3,28 +3,38 @@
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
-<ul class="nav navbar-nav navbar-right">
-    <li>
-        @Html.ActionLink("Profile", "Index", "Profile", routeValues: null, htmlAttributes: new { title = "Profile" })
-    </li>
-    <li>
-        @Html.ActionLink("Search for songs", "Search", "Playlists")
-    </li>
-    <li>
-        @Html.ActionLink("View playlists", "Index", "Playlists")
-    </li>
-    <li>
-        <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
-    </li>
-</ul>
+        
+
+        <div class="card border-primary mb-3" style="max-width: 20rem;">
+            <div class="card-header">Hello @User.Identity.Name!</div>
+            <div class="card-body">
+                
+                <p class="card-text">
+                    @Html.ActionLink("Profile", "Index", "Profile", routeValues: null, htmlAttributes: new { title = "Profile" })
+                </p>
+                <p class="card-text">
+                    @Html.ActionLink("Search for songs", "Search", "Playlists")
+                </p>
+                <p class="card-text">
+                    @Html.ActionLink("View your playlists", "Index", "Playlists")
+                </p>
+                <p class="card-text">
+                    <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                </p>
+            </div>
+        </div>
+
     }
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
+    <div class="card border-primary mb-3" style="max-width: 20rem;">
+        <div class="card-header">Welcome!</div>
+        <div class="card-body">
+            <p>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</p>
+            <p>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</p>
+        </div>
+    </div>
 }
