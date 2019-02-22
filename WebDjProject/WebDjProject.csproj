@@ -46,8 +46,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Stripe.net, Version=22.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stripe.net.22.9.0\lib\net45\Stripe.net.dll</HintPath>
+    <Reference Include="Stripe.net, Version=24.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stripe.net.24.0.2\lib\net45\Stripe.net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -266,6 +266,7 @@
     <Content Include="Views\Profile\Privatize.cshtml" />
     <Content Include="Views\Playlists\Search.cshtml" />
     <Content Include="Views\Playlists\Remove.cshtml" />
+    <Content Include="Views\Profile\StripePayment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -14,7 +14,7 @@
 
 @if (User.IsInRole("PremiumUser"))
 {
-<h3>★Premium User★</h3>
+    <h3>★Premium User★</h3>
 }
 
 <br />
@@ -27,7 +27,7 @@
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
     <h4>Change your account settings</h4>
-    
+
     <dl class="dl-horizontal">
         <dt>Password:</dt>
         <dd>
@@ -48,21 +48,25 @@
             [ @Html.ActionLink("Privatize", "Privatize") ]
         </dd>
         <br />
-        <dt>Upgrade account to premium status</dt>
-        <dd>
-            <form action="@Url.Action("Index", "Profile")" method="POST">
-                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                        data-key="pk_test_6cDEXb7U4fVzevejZgaA1gDW"
-                        data-amount="999"
-                        data-name="WebDJ premium services"
-                        data-description="Recurring monthly fee"
-                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                        data-locale="auto">
-                    console.log("TEST");
-                </script>
-            </form>
-        </dd>
-    </dl>
+
+        @if (User.IsInRole("PremiumUser")==false)
+        {
+            <dt>Upgrade account to premium status</dt>
+            <dd>
+                <form action="@Url.Action("StripePayment", "Profile")" method="POST">
+                    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                            data-key="pk_test_6cDEXb7U4fVzevejZgaA1gDW"
+                            data-amount="999"
+                            data-name="WebDJ premium services"
+                            data-description="Recurring monthly fee"
+                            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                            data-locale="auto">
+                        doSomething();
+                    </script>
+                </form>
+            </dd>
+         }
+        </dl>
 </div>
 
 

@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Stripe;
 using WebDjProject.Models;
 
 namespace WebDjProject.Controllers
@@ -164,6 +166,38 @@ namespace WebDjProject.Controllers
             user.PrivateStatus = true;
             db.SaveChanges();
             return RedirectToAction("Index", new { Message = ManageMessageId.PrivatizeSuccess });
+        }
+
+        [ActionName("StripePayment")]
+        public ActionResult StripePayment()
+        {
+            StripeConfiguration.SetApiKey("sk_test_dFDizp08z3Cyn2klQBvAMvOc");
+
+            //var token = model.Token; 
+
+            var options = new ChargeCreateOptions
+            {
+                Amount = 999,
+                Currency = "usd",
+                SourceId = "tok_visa",
+                ReceiptEmail = "ethan.straub@gmail.com",
+            };
+            var service = new ChargeService();
+            Charge charge = service.Create(options);
+
+            var user = User.Identity;
+            ApplicationDbContext db = new ApplicationDbContext();
+            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+           
+            //check for user roles
+            //if user is not in role, add him to it
+            if (User.IsInRole("PremiumUser")==false)
+            {
+                UserManager.AddToRole(user.GetUserId(), "PremiumUser");
+            }
+
+            db.SaveChanges();
+            return View(charge);
         }
 
         protected override void Dispose(bool disposing)
