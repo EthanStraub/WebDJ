@@ -7,7 +7,7 @@
 <h2>Remove tracks from your playlists.</h2>
 
 <div class="jumbotron">
-  <table id=resultsTable></table>
+    <table id=resultsTable></table>
 </div>
 
 <p>
@@ -83,7 +83,7 @@
 
         var usedPlaylistID = '@item.spotifyPlaylistID';
         usedPlaylistIDs.push(usedPlaylistID);
-        
+
         </text>
         }
         return usedPlaylistIDs;
@@ -97,12 +97,12 @@
 
         var usedPlaylistName = '@item.playlistName';
         usedPlaylistNames.push(usedPlaylistName);
-        
+
         </text>
         }
         return usedPlaylistNames;
     }
-    
+
     function displayPlaylists() {
 
         for (i = 0; i < 20; i++) {
@@ -112,7 +112,7 @@
         var usedPlaylistNames = pushPlaylistNames();
 
         if (usedPlaylistIDs) {
-            
+
             //console.log(usedPlaylistIDs);
 
             if (_token) {
@@ -141,14 +141,14 @@
 
                     //console.log("Index: " + i);
                 }
-                    
+
                 //console.log(trackIDNamePairList);
 
                 //delayedResponse(trackIDNamePairList, usedPlaylistNames)
             }
 
             //window.setTimeout(delayedResponse, 3000);
-            
+
         }
 
     }
@@ -159,55 +159,57 @@
         nameRow.innerHTML = "<br /><br /><h2>" + usedPlaylistName + "</h2><br />"
 
         for (j = 1; j < (nonNullList.length / 2) + 1; j++) {
+            (function () {
+                btnIndex += 1
+                pushedIndex += 1
 
-            btnIndex += 1
-            pushedIndex += 1
+                var trackIndex = 0;
+                var btnId = "addTrack" + btnIndex.toString();
 
-            var trackIndex = 0;
-            var btnId = "addTrack" + btnIndex.toString();
+                var trackRow1 = table.insertRow();
+                var trackRow2 = table.insertRow();
+                var buttonRow = table.insertRow();
 
-            var trackRow1 = table.insertRow();
-            var trackRow2 = table.insertRow();
-            var buttonRow = table.insertRow();
+                var displayedTrackName = nonNullList[j * 2 - 2]
+                var displayedTrackID = nonNullList[j * 2 - 1]
+                //console.log(nonNullList[i * 2 - 1]);
+                //console.log(nonNullList[i * 2]);
+                trackRow1.innerHTML = "<br /><h5>" + displayedTrackName + "</h5>"
+                trackRow2.innerHTML = "<dl><dt> ID: " + displayedTrackID + "</dt></dl>"
 
-            var displayedTrackName = nonNullList[j * 2 - 2]
-            var displayedTrackID = nonNullList[j * 2 - 1]
-            //console.log(nonNullList[i * 2 - 1]);
-            //console.log(nonNullList[i * 2]);
-            trackRow1.innerHTML = "<br /><h5>" + displayedTrackName + "</h5>"
-            trackRow2.innerHTML = "<dl><dt> ID: " + displayedTrackID + "</dt></dl>"
+                buttonRow.innerHTML = '<input id="' + btnId + '" type="button" class="btn btn-danger" value="Remove" /><br />';
+
+
+                //var addressedIndex = (btnIndex + 2) % numOfLists;
+                //console.log(addressedIndex);
+                //console.log(btnId);
+
+                pushedTrackID = displayedTrackID.toString() + "_" + pushedIndex.toString();
+
+                displayedTracks.push(pushedTrackID);
+
+                trackIndex = displayedTracks.indexOf(pushedTrackID)
+
+                var delTrackBtn = document.getElementById(btnId);
+                if (delTrackBtn.addEventListener)
+                    delTrackBtn.addEventListener("click", delTrack, false);
+                else if (delTrackBtn.attachEvent)
+                    delTrackBtn.attachEvent('onclick', delTrack);
+
+
+
+
+                function delTrack() {
+                    //console.log(usedPlaylistID);
+                    console.log(trackIndex);
+                    //console.log(displayedTrackID);
+                    //console.log(_token);
+                    spotifyRemoveTrack(usedPlaylistID, displayedTrackID, trackIndex, _token)
+                }
+            }());
             
-            buttonRow.innerHTML = '<input id="' + btnId + '" type="button" class="btn btn-danger" value="Remove" /><br />';
 
 
-            //var addressedIndex = (btnIndex + 2) % numOfLists;
-            //console.log(addressedIndex);
-            //console.log(btnId);
-
-            pushedTrackID = displayedTrackID.toString() + "_" + pushedIndex.toString();
-
-            displayedTracks.push(pushedTrackID);
-
-            trackIndex = displayedTracks.indexOf(pushedTrackID)
-            
-            var delTrackBtn = document.getElementById(btnId);
-            if (delTrackBtn.addEventListener)
-                delTrackBtn.addEventListener("click", delTrack, false);
-            else if (delTrackBtn.attachEvent)
-                delTrackBtn.attachEvent('onclick', delTrack);
-            
-            
-
-
-            function delTrack() {
-                //console.log(usedPlaylistID);
-                console.log(trackIndex);
-                //console.log(displayedTrackID);
-                //console.log(_token);
-                spotifyRemoveTrack(usedPlaylistID, displayedTrackID, trackIndex, _token)
-            }
-
-            
         }
     }
 
@@ -241,7 +243,7 @@
                 //console.log('PlistID_' + id);
                 //document.getElementById('PlistID_' + id).value = 7;
                 //console.log(document.getElementById('PlistID_' + id));
-                
+
             },
             error: function (response) {
                 //console.log(response);
@@ -266,7 +268,7 @@
                 'Content-Type': 'application/json'
             },
             success: function (response) {
-                location.reload(true); 
+                location.reload(true);
             },
             error: function (response) {
                 console.log(response);
@@ -274,7 +276,7 @@
         });
     }
 
-    
+
     //getSongs('7oFCgqPhLW39EHcoMnIdXX', _token);
     //spotifyRemoveTrack('7oFCgqPhLW39EHcoMnIdXX','53NkOWxyBmjUKHl30A8l9S',4, _token)
     displayPlaylists()

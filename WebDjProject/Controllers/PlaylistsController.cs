@@ -19,9 +19,18 @@ namespace WebDjProject.Controllers
         // GET: Playlists
         public ActionResult Index()
         {
-            string userId = User.Identity.GetUserId();
-            var playlists = db.Playlists.Where(p => p.ApplicationUserId == userId);
-            return View(playlists.ToList());
+            if (User.IsInRole("Admin"))
+            {
+                var playlists = db.Playlists;
+                return View(playlists.ToList());
+            }
+            else
+            {
+                string userId = User.Identity.GetUserId();
+                var playlists = db.Playlists.Where(p => p.ApplicationUserId == userId);
+                return View(playlists.ToList());
+            }
+            
         }
 
         // GET: Playlists/Details/5
@@ -150,9 +159,18 @@ namespace WebDjProject.Controllers
 
         public ActionResult Remove()
         {
-            string userId = User.Identity.GetUserId();
-            var playlists = db.Playlists.Where(p => p.ApplicationUserId == userId);
-            return View(playlists.ToList());
+            if (User.IsInRole("Admin"))
+            {
+                var playlists = db.Playlists;
+                return View(playlists.ToList());
+            }
+            else
+            {
+                string userId = User.Identity.GetUserId();
+                var playlists = db.Playlists.Where(p => p.ApplicationUserId == userId);
+                return View(playlists.ToList());
+            }
+            
         }
 
         [HttpPost, ActionName("UpdateSongCount")]
@@ -163,6 +181,7 @@ namespace WebDjProject.Controllers
             oldPlaylist.songCount = playlist.songCount;
             
             db.SaveChanges();
+
             return RedirectToAction("Index");
         }
 

@@ -14,20 +14,27 @@
 <table>
     <tr>
         <td>
-            <input id="searchTracks" type="button" class="btn btn-outline-primary" value="Search for songs." />
+            <input id="searchTracks" type="button" class="btn btn-outline-primary" value="Search for songs" />
         </td>
-    
+
         <td>
-            <input id="searchAlbums" type="button" class="btn btn-outline-primary" value="Search for albums." />
+            <input id="searchAlbums" type="button" class="btn btn-outline-primary" value="Search for albums" />
         </td>
-    
+
         <td>
-            <input id="searchArtists" type="button" class="btn btn-outline-primary" value="Search for artists." />
+            <input id="searchArtists" type="button" class="btn btn-outline-primary" value="Search for artists" />
         </td>
-    
+
         <td>
             <input id="searchSpotifyPlaylists" class="btn btn-outline-success" type="button" value="Search for playlists on Spotify" />
         </td>
+        @if (User.IsInRole("Admin"))
+        {
+            <td>
+                <input id="adminFeatureSong" class="btn btn-outline-info" type="button" value="ADMIN: Search for songs to feature" />
+            </td>
+        }
+
     </tr>
 </table>
 
@@ -121,6 +128,23 @@
     else if (searchSpotifyPlaylistsBtn.attachEvent)
         searchSpotifyPlaylistsBtn.attachEvent('onclick', searchSpotifyPlaylists);
 
+    @if (User.IsInRole("Admin"))
+    {
+    <text>
+    var adminFeatureSongBtn = document.getElementById("adminFeatureSong");
+    if (adminFeatureSongBtn.addEventListener)
+        adminFeatureSongBtn.addEventListener("click", adminFeatureSong, false);
+    else if (adminFeatureSongBtn.attachEvent)
+        adminFeatureSongBtn.attachEvent('onclick', adminFeatureSong);
+
+    function adminFeatureSong()
+    {
+    spotifyAdminTrackSearch(document.getElementById('searchInput').value)
+    }
+    </text>
+    }
+    
+
 
 
     function searchAlbums() {
@@ -139,6 +163,7 @@
         spotifyPlaylistSearch(document.getElementById('searchInput').value)
     }
 
+    
     var resultsArray = [];
     var dataResults = "";
     var searchURL = "https://api.spotify.com/v1/search?q=";
@@ -437,16 +462,19 @@
                 'Content-Type': 'application/json'
             },
             success: function (response) {
-                console.log(response);
+                alert("Song added to playlist.");
+                //console.log(response);
             },
             error: function (response) {
-                console.log(response);
-                console.log("ERROR");
+                //console.log(response);
+                //console.log("ERROR");
             }
         });
     }
 
+    function spotifyAdminTrackSearch() {
 
+    }
 
     function spotifyGetUserId() {
         $.ajax({
@@ -454,7 +482,7 @@
             type: "GET",
             beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
             success: function (data) {
-                console.log(data.id);
+                //console.log(data.id);
                 return data.id;
             }
         });
@@ -462,14 +490,14 @@
 
     function pushPlaylistIDs() {
         var usedPlaylistIDs = [];
-        @foreach(var item in Model)
+        @foreach (var item in Model)
         {
         <text>
         var sCount = '@item.songCount'
         var pStatus = premiumCheck();
 
         if (pStatus == false && sCount >= 20) {
-            console.log("PLAYLIST '@item.playlistName' IS FULL");
+            //console.log("PLAYLIST '@item.playlistName' IS FULL");
         }
         else
         {
@@ -491,7 +519,7 @@
         var sCount = '@item.songCount'
         var pStatus = '@User.IsInRole("PremiumUser")'
 
-        console.log("TEST1");
+        //console.log("TEST1");
         if (pStatus == false && sCount >= 20) {
             console.log("PLAYLIST '@item.playlistName' IS FULL");
         }
@@ -501,7 +529,7 @@
             var usedPlaylistName = '@item.playlistName';
             usedPlaylistNames.push(usedPlaylistName);
         }
-        console.log("TEST2");
+        //console.log("TEST2");
         
         </text>
         }

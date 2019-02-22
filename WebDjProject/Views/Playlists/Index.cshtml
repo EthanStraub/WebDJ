@@ -52,8 +52,8 @@ else
             <td>
                 @Html.ActionLink("Edit name", "Edit", new { id = item.playlistId }) |
                 @Html.ActionLink("Listen", "Details", new { id = item.playlistId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.playlistId }) |
-                @Html.ActionLink("Remove songs", "Remove")
+                @Html.ActionLink("Delete", "Delete", new { id = item.playlistId })
+                
             </td>
         </tr>
     }
@@ -61,6 +61,7 @@ else
 
 </table>
 
+<p>@Html.ActionLink("Remove songs from your playlists", "Remove")</p>
 
 
 
