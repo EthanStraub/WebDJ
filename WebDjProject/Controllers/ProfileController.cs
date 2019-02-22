@@ -3,9 +3,13 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -188,16 +192,44 @@ namespace WebDjProject.Controllers
             var user = User.Identity;
             ApplicationDbContext db = new ApplicationDbContext();
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
-           
+
+            var userID = user.GetUserId();
+            var loggedInUser = db.Users.Where(u => u.Id == userID).Single();
+
+            var userName = loggedInUser.UserName;
+            var userAddress = loggedInUser.Email;
+
             //check for user roles
             //if user is not in role, add him to it
             if (User.IsInRole("PremiumUser")==false)
             {
-                UserManager.AddToRole(user.GetUserId(), "PremiumUser");
+                UserManager.AddToRole(userID, "PremiumUser");
+                SendMail(userAddress, userName);
+                Thread.Sleep(2000);
+                //FormsAuthentication.SignOut();
             }
 
             db.SaveChanges();
             return View(charge);
+        }
+
+        public void SendMail(string address, string name)
+        {
+            // Command line argument must the the SMTP host.
+            SmtpClient client = new SmtpClient();
+            client.Port = 587;
+            client.Host = "smtp.gmail.com";
+            client.EnableSsl = true;
+            client.Timeout = 10000;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            client.Credentials = new System.Net.NetworkCredential("biblebot99@gmail.com", "Carbuncle#9");
+
+            MailMessage mm = new MailMessage(address, address, "WebDJ -- " + name + "'s account has been approved.", "Your account has now been approved for our premium services. For this change to take effect, please log out and then log back into your WebDJ account.");
+            mm.BodyEncoding = UTF8Encoding.UTF8;
+            mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
+
+            client.Send(mm);
         }
 
         protected override void Dispose(bool disposing)

@@ -6,10 +6,22 @@
 
 <h2>Playlists</h2>
 
-
+@if (User.IsInRole("PremiumUser") == false && Model.Count() >= 3)
+{
+//No more space!
+}
+else if (User.IsInRole("PremiumUser") == true && Model.Count() >= 5)
+{
+//No more space!
+}
+else
+{
 <p>
     @Html.ActionLink("Create New Playlist", "Create")
 </p>
+}
+
+
 
 <table class="table table-hover">
     <tr>
@@ -132,7 +144,7 @@
         //I'm not entirely sure why this is needed here but...
         //It's the only thing keeping the ajax request functioning.
         console.log(newCount);
-        
+
         var objAjax = new Object();
         objAjax.songCount = newCount; // Model prop is int type so this value must be int.
         objAjax.playlistId = '@item.playlistId';
