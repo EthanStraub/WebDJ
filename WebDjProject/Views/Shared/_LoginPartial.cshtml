@@ -10,7 +10,7 @@
         <div class="card border-primary mb-3" style="max-width: 20rem;">
             <div class="card-header">Hello @User.Identity.Name!</div>
             <div class="card-body">
-                
+
                 <p class="card-text">
                     @Html.ActionLink("Profile", "Index", "Profile", routeValues: null, htmlAttributes: new { title = "Profile" })
                 </p>
@@ -20,11 +20,14 @@
                 <p class="card-text">
                     @Html.ActionLink("View your playlists", "Index", "Playlists")
                 </p>
-                @if(User.IsInRole("PremiumUser"))
-                {
                 <p class="card-text">
-                    @Html.ActionLink("Get a reccommendation", "Reccommendation", "Home")
+                    @Html.ActionLink("View other user's playlists", "Shared", "Playlists")
                 </p>
+                @if (User.IsInRole("PremiumUser"))
+                {
+                    <p class="card-text">
+                        @Html.ActionLink("Get a reccommendation", "Reccommendation", "Home")
+                    </p>
                 }
                 <p class="card-text">
                     <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>

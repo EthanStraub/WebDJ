@@ -274,6 +274,7 @@
     <Content Include="Views\Playlists\Remove.cshtml" />
     <Content Include="Views\Profile\StripePayment.cshtml" />
     <Content Include="Views\Home\Reccommendation.cshtml" />
+    <Content Include="Views\Playlists\Shared.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
