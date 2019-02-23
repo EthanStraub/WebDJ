@@ -314,8 +314,8 @@
                                 var buttonRow = table.insertRow();
                                 buttonRow.innerHTML = '<td><input id="' + btnId + '" type="button" class="btn btn-secondary" value="Add track to ' + playlistNameList[i] + '" /></td><br/>';
 
-                                var addressedIndex = (btnIndex + 2) % playlistIDList.length;
-                                //console.log(addressedIndex);
+                                var addressedIndex = (btnIndex + playlistIDList.length - 1) % playlistIDList.length;
+                                console.log(addressedIndex);
 
 
                                 switch (addressedIndex) {
@@ -606,7 +606,7 @@
         {
         <text>
         var sCount = '@item.songCount'
-        var pStatus = '@User.IsInRole("PremiumUser")'
+        var pStatus = premiumCheck();
 
         //console.log("TEST1");
         if (pStatus == false && sCount >= 20) {
