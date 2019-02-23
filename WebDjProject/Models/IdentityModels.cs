@@ -23,8 +23,6 @@ namespace WebDjProject.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         DbSet<Playlist> Playlist;
-        DbSet<Song> Song;
-        DbSet<Playlist_Song> Playlist_Song;
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

@@ -20,6 +20,12 @@
                 <p class="card-text">
                     @Html.ActionLink("View your playlists", "Index", "Playlists")
                 </p>
+                @if(User.IsInRole("PremiumUser"))
+                {
+                <p class="card-text">
+                    @Html.ActionLink("Get a reccommendation", "Reccommendation", "Home")
+                </p>
+                }
                 <p class="card-text">
                     <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
                 </p>

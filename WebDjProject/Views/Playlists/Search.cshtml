@@ -472,9 +472,98 @@
         });
     }
 
-    function spotifyAdminTrackSearch() {
+    function spotifyAdminTrackSearch(term) {
+        for (i = 0; i < 21; i++) {
+            $("#resultsTable tr").remove();
+        }
 
+        term = term.replace(" ", "+");
+        $.ajax({
+            url: searchURL + term + "&type=track&market=US",
+            type: "GET",
+            beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
+            success: function (data) {
+                console.log(data);
+                for (var trackData in data) {
+
+                    var trackItemList = [];
+                    var tracks = data[trackData];
+
+                    for (var item in tracks) {
+                        trackItemList.push(tracks[item]);
+                    }
+
+                    var index = 0;
+                    var btnIndex = 0
+
+
+                    var results = trackItemList[1];
+                    console.log(results);
+                    if (results.length >= 1) {
+
+                        $.each(results, function (key, val) {
+
+                            var trackRow = table.insertRow();
+                            index += 1;
+                            trackRow.innerHTML = '<h3>' + index + '. ' + val.name + '</h3><iframe src="https://open.spotify.com/embed/track/' + val.id + '" width="300" height="84" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe><br/>';
+
+                            btnIndex += 1
+                            var btnId = "featureTrack" + btnIndex.toString();
+                            var buttonRow = table.insertRow();
+                            buttonRow.innerHTML = '<td><input id="' + btnId + '" type="button" class="btn btn-info" value="Feature" /></td><br/>';
+
+                                
+                            var featureTrackBtn = document.getElementById(btnId);
+                            if (featureTrackBtn.addEventListener)
+                                featureTrackBtn.addEventListener("click", feature, false);
+                            else if (featureTrackBtn.attachEvent)
+                                featureTrackBtn.attachEvent('onclick', feature);
+
+                            //console.log("DEBUG");
+
+                            var usedTrack = val.id;
+
+                            function feature() {
+                                spotifyFeatureTrack(usedTrack)
+                            }
+
+                        });
+
+                        if (results.length < 20) {
+                            var noMoreRow = table.insertRow();
+                            noMoreRow.innerHTML = "<h3>No more results...</h3>";
+                            return;
+                        }
+                    }
+                    else {
+                        var noResultsRow = table.insertRow();
+                        noResultsRow.innerHTML = "<h3>No results...</h3>";
+                    }
+                };
+            }
+        });
     }
+
+    function spotifyFeatureTrack(trackID) {
+        var trackIdObject = new Object();
+        trackIdObject.trackID = trackID;
+        //console.log(trackID);
+
+        $.ajax('@Url.Action("Index", "Home")', {
+        type: 'POST',
+        data: JSON.stringify(trackIdObject),
+        contentType: "application/json",
+        async: true,
+        traditional: true,
+        success: function (returnData) {
+            alert("Song has been featured.")
+        },
+        error: function (returnData) {
+            console.log(returnData);
+            console.log("Error!");
+        }
+        });
+    } 
 
     function spotifyGetUserId() {
         $.ajax({

@@ -6,11 +6,22 @@
 <html>
 <body class="container">
 
+    @{
+        @Html.Hidden("featuredTrack", Session["featuredTrack"])
+    }
+    <center>
+        <div class="jumbotron">
+            <h2>Featured Track</h2>
+            <p id="trackSpace"></p>
+        </div>
+    </center>
     
-
-
-    
-
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script>
+        var trackSpace = document.getElementById("trackSpace");
+        var trackVal = $("#featuredTrack").val();
+        trackSpace.innerHTML = '</h3><iframe src="https://open.spotify.com/embed/track/' + trackVal + '" width="600" height="400" frameborder="10" allowtransparency="true" allow="encrypted-media"></iframe><br/>'
+    </script>
     <!--<h4 class="text-salmon">Spotify Web Playback SDK Template</h4>
     <h4>This app uses the implicit grant authorization flow to get an access token and initialise the Web Playback SDK. It then uses the Spotify Connect Web API to play a song.</h4>
     <p>If everything is set up properly, you should hear some music!</p>

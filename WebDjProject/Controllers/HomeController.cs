@@ -13,20 +13,9 @@ namespace WebDjProject.Controllers
 {
     public class HomeController : Controller
     {
+
         public ActionResult Index()
         {
-            StripeConfiguration.SetApiKey("sk_test_dFDizp08z3Cyn2klQBvAMvOc");
-
-            var options = new ChargeCreateOptions
-            {
-                Amount = 999,
-                Currency = "usd",
-                SourceId = "tok_visa",
-                ReceiptEmail = "ethan.straub@gmail.com",
-            };
-            var service = new ChargeService();
-            Charge charge = service.Create(options);
-
             return View();
         }
 
@@ -42,6 +31,23 @@ namespace WebDjProject.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        
+        [HttpPost, ActionName("Index")]
+        public ActionResult Index(string trackID)
+        {
+           Session["featuredTrack"] = trackID;
+
+           return View();
+        }
+
+        public ActionResult Reccommendation()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            string userId = User.Identity.GetUserId();
+            var playlists = db.Playlists.Where(p => p.ApplicationUserId == userId);
+            return View(playlists.ToList());
         }
 
 
