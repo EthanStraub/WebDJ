@@ -21,7 +21,7 @@
                     @Html.ActionLink("View your playlists", "Index", "Playlists")
                 </p>
                 <p class="card-text">
-                    @Html.ActionLink("View other user's playlists", "Shared", "Playlists")
+                    @Html.ActionLink("View other users", "Index", "SharedUsers")
                 </p>
                 @if (User.IsInRole("PremiumUser"))
                 {

@@ -185,6 +185,7 @@
     <Compile Include="Controllers\PlaylistsController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\SharedUsersController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -274,7 +275,8 @@
     <Content Include="Views\Playlists\Remove.cshtml" />
     <Content Include="Views\Profile\StripePayment.cshtml" />
     <Content Include="Views\Home\Reccommendation.cshtml" />
-    <Content Include="Views\Playlists\Shared.cshtml" />
+    <Content Include="Views\SharedUsers\PlaylistsIndex.cshtml" />
+    <Content Include="Views\SharedUsers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

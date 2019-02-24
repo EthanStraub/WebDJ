@@ -173,31 +173,7 @@ namespace WebDjProject.Controllers
             
         }
 
-        public ActionResult Shared()
-        {
-            if (User.IsInRole("Admin"))
-            {
-                var playlists = db.Playlists;
-                return View(playlists.ToList());
-            }
-            else
-            {
-                string userId = User.Identity.GetUserId();
-                var usersList = db.Users.Where(u => u.PrivateStatus == true && u.Id != userId).ToList();
-                List<Playlist> playlistsList = new List<Playlist>();
-                foreach (var user in usersList)
-                {
-                    var addedPlaylists = db.Playlists.Where(p => p.ApplicationUserId == user.Id);
-                    foreach (var playlist in addedPlaylists)
-                    {
-                        playlistsList.Add(playlist);
-                    }
-                    
-                }
-                return View(playlistsList);
-            }
-        }
-
+        
         [HttpPost, ActionName("UpdateSongCount")]
         public ActionResult UpdateSongCount(Playlist playlist)
         {

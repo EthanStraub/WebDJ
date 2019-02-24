@@ -215,21 +215,16 @@ namespace WebDjProject.Controllers
 
         public void SendMail(string address, string name)
         {
-            // Command line argument must the the SMTP host.
+            MailMessage mail = new MailMessage("webdjmessaging@gmail.com", address);
             SmtpClient client = new SmtpClient();
-            client.Port = 587;
-            client.Host = "smtp.gmail.com";
             client.EnableSsl = true;
-            client.Timeout = 10000;
+            client.Port = 587;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
-            client.Credentials = new System.Net.NetworkCredential("biblebot99@gmail.com", "Carbuncle#9");
-
-            MailMessage mm = new MailMessage(address, address, "WebDJ -- " + name + "'s account has been approved.", "Your account has now been approved for our premium services. For this change to take effect, please log out and then log back into your WebDJ account.");
-            mm.BodyEncoding = UTF8Encoding.UTF8;
-            mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
-
-            client.Send(mm);
+            client.Host = "smtp.gmail.com";
+            mail.Subject = "WebDJ -- " + name + "'s account has been approved.";
+            mail.Body = "Your account has now been approved for our premium services. For this change to take effect, please log out and then log back into your WebDJ account.";
+            client.Send(mail);
         }
 
         protected override void Dispose(bool disposing)

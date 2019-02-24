@@ -1,0 +1,55 @@
+﻿@model IEnumerable<WebDjProject.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "Users";
+}
+
+<h2>Users</h2>
+
+@if (Model.Count() == 0)
+{
+    <div class="jumbotron">
+        <h2>There doesn't seem to be anything here...</h2>
+        <h5>Other users have likely privatized their account, preventing you from seeing their accounts.</h5>
+    </div>
+}
+else
+{
+    <table class="table table-hover">
+        <tr>
+            <th>
+                User Name
+            </th>
+            <th>
+                Premium Status
+            </th>
+        </tr>
+
+        
+        @foreach (var item in Model)
+        {
+        <tr>
+            @Html.HiddenFor(modelItem => item.Id)
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            @if (item.Roles.Count > 1)
+            {
+                <td>
+                    Premium User
+                </td>
+            }
+            else
+            {
+                <td>
+                    Non-premium User
+                </td>
+            }
+
+            <td>
+                @Html.ActionLink("Playlists","PlaylistsIndex", new { id = item.Id })
+            </td>
+        </tr>
+        }
+    </table>
+}
