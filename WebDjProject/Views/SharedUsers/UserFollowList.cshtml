@@ -1,0 +1,51 @@
+﻿@model IEnumerable<WebDjProject.Models.UserFollow>
+
+@{
+    ViewBag.Title = "Followed users";
+}
+
+<h2>Users</h2>
+
+@if (Model.Count() == 0)
+{
+    <div class="jumbotron">
+        <h2>There doesn't seem to be anything here...</h2>
+        <h5>It looks like you haven't followed any users yet!</h5>
+        <h5>Try looking for other users on our website first.</h5>
+    </div>
+}
+else
+{
+    <table class="table table-hover">
+        <tr>
+            <th>
+                User Name
+            </th>
+            <th>
+                Playlists
+            </th>
+            <th>
+                Unfollow
+            </th>
+        </tr>
+
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.followedUserName)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Playlists", "PlaylistsIndex", new { id = item.followedID })
+                </td>
+
+                <td>
+                    @Html.ActionLink("Unfollow", "UserUnfollow", new { id = item.UserFollowPairID })
+                </td>
+            </tr>
+        }
+    </table>
+}
+

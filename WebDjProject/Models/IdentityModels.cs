@@ -23,6 +23,7 @@ namespace WebDjProject.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         DbSet<Playlist> Playlist;
+        DbSet<UserFollow> UserFollow;
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
@@ -34,5 +35,6 @@ namespace WebDjProject.Models
         }
 
         public System.Data.Entity.DbSet<WebDjProject.Models.Playlist> Playlists { get; set; }
+        public System.Data.Entity.DbSet<WebDjProject.Models.UserFollow> UserFollows { get; set; }
     }
 }

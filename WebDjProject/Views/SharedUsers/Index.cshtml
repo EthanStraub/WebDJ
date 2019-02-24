@@ -6,6 +6,10 @@
 
 <h2>Users</h2>
 
+<h4>
+    @Html.ActionLink("View users you follow", "UserFollowList", new { id = User.Identity.GetUserId() })
+</h4>
+
 @if (Model.Count() == 0)
 {
     <div class="jumbotron">
@@ -29,6 +33,12 @@ else
                     Private Account Status
                 </th>
             }
+            <th>
+                Playlists
+            </th>
+            <th>
+                Follow
+            </th>
         </tr>
 
         
@@ -39,7 +49,7 @@ else
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
             </td>
-            @if (item.Roles.Count() > 1)
+            @if (item.Roles.Count() >= 1)
             {
                 <td>
                     Premium User
@@ -72,7 +82,16 @@ else
             <td>
                 @Html.ActionLink("Playlists", "PlaylistsIndex", new { id = item.Id })
             </td>
+
+            @if (!User.IsInRole("Admin"))
+            {
+            <td>
+                @Html.ActionLink("Follow", "UserFollow", new { id = item.Id })
+            </td>
+            }
         </tr>
         }
     </table>
 }
+
+
