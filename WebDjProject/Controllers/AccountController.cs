@@ -182,7 +182,7 @@ namespace WebDjProject.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                    userManager.AddToRole(user.Id, "RegisteredUser");
+                    
                     user.PrivateStatus = false;
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771  Jump ;            
 

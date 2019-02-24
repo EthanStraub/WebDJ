@@ -626,11 +626,10 @@
     }
 
     function premiumCheck() {
-        var status1 = '@User.IsInRole("RegisteredUser")'
-        var status2 = '@User.IsInRole("PremiumUser")'
-        var status3 = '@User.IsInRole("Admin")'
+        var status1 = '@User.IsInRole("PremiumUser")'
+        var status2 = '@User.IsInRole("Admin")'
 
-        if (status2 == "False") {
+        if (status1 == "False") {
             return false;
         }
         else {

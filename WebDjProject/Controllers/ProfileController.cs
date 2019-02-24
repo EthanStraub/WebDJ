@@ -215,16 +215,21 @@ namespace WebDjProject.Controllers
 
         public void SendMail(string address, string name)
         {
-            MailMessage mail = new MailMessage("webdjmessaging@gmail.com", address);
+            // Command line argument must the the SMTP host.
             SmtpClient client = new SmtpClient();
-            client.EnableSsl = true;
             client.Port = 587;
+            client.Host = "smtp.gmail.com";
+            client.EnableSsl = true;
+            client.Timeout = 10000;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
-            client.Host = "smtp.gmail.com";
-            mail.Subject = "WebDJ -- " + name + "'s account has been approved.";
-            mail.Body = "Your account has now been approved for our premium services. For this change to take effect, please log out and then log back into your WebDJ account.";
-            client.Send(mail);
+            client.Credentials = new System.Net.NetworkCredential("biblebot99@gmail.com", "Carbuncle#9");
+
+            MailMessage mm = new MailMessage(address, address, "WebDJ-- " + name + "'s account has been approved.", "Your account has now been approved for our premium services. For this change to take effect, please log out and then log back into your WebDJ account. (Note: This a test email sent by an ASP.NET mvc web application. This is only a test.)");
+            mm.BodyEncoding = UTF8Encoding.UTF8;
+            mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
+
+            client.Send(mm);
         }
 
         protected override void Dispose(bool disposing)
@@ -255,6 +260,7 @@ namespace WebDjProject.Controllers
             }
             return false;
         }
+
 
 
         public enum ManageMessageId

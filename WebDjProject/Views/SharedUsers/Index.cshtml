@@ -23,6 +23,12 @@ else
             <th>
                 Premium Status
             </th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th>
+                    Private Account Status
+                </th>
+            }
         </tr>
 
         
@@ -33,7 +39,7 @@ else
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
             </td>
-            @if (item.Roles.Count > 1)
+            @if (item.Roles.Count() > 1)
             {
                 <td>
                     Premium User
@@ -45,9 +51,26 @@ else
                     Non-premium User
                 </td>
             }
+            @if (User.IsInRole("Admin"))
+            {
+                
+                if(item.PrivateStatus)
+                {
+                <td>
+                    Private
+                </td>
+                }
+                else
+                {
+                <td>
+                    Public
+                </td>
+                }
+                
+            }
 
             <td>
-                @Html.ActionLink("Playlists","PlaylistsIndex", new { id = item.Id })
+                @Html.ActionLink("Playlists", "PlaylistsIndex", new { id = item.Id })
             </td>
         </tr>
         }
