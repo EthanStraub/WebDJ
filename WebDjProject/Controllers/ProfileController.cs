@@ -220,7 +220,7 @@ namespace WebDjProject.Controllers
             client.Timeout = 10000;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
-            client.Credentials = new System.Net.NetworkCredential("webdjmessaging99@gmail.com", "Carbuncle#9");
+            client.Credentials = new System.Net.NetworkCredential("webdjmessaging@gmail.com", "Carbuncle#9");
 
             MailMessage mm = new MailMessage(address, address, "WebDJ -- " + name + "'s account has been approved.", "Your account has now been approved for our premium services. For this change to take effect, please log out and then log back into your WebDJ account. (Note: This a test email sent by an ASP.NET mvc web application. This is only a test.)");
             mm.BodyEncoding = UTF8Encoding.UTF8;
