@@ -1,0 +1,190 @@
+﻿@model IEnumerable<WebDjProject.Models.Playlist>
+
+@{
+    ViewBag.Title = "Send out emails";
+}
+
+<h3>
+    <button onclick="postTrackSets()">Send out emails to premium users.</button>
+</h3>
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+
+
+    // Get the hash of the url
+    const hash = window.location.hash
+        .substring(1)
+        .split('&')
+        .reduce(function (initial, item) {
+            if (item) {
+                var parts = item.split('=');
+                initial[parts[0]] = decodeURIComponent(parts[1]);
+            }
+            return initial;
+        }, {});
+    window.location.hash = '';
+
+    // Set token
+    let _token = hash.access_token;
+
+    const authEndpoint = 'https://accounts.spotify.com/authorize';
+    const refreshEndpoint = 'https://accounts.spotify.com/api/token'
+
+    // Replace with your app's client ID, redirect URI and desired scopes
+    const clientId = 'ddb6bd84d33c42aba1450a177ca0f23e';
+    const redirectUri = 'http://localhost:53881/Users/GetSongs/';
+    const clientSecret = 'd2e2b989c762414c88b6c3121dd44a65';
+
+    const scopes = [
+        'playlist-read-private',
+        'user-modify-playback-state',
+        'user-read-recently-played',
+        'user-read-currently-playing',
+        'playlist-modify-private',
+        'app-remote-control',
+        'playlist-modify-public',
+        'user-read-birthdate',
+        'user-read-playback-state',
+        'user-read-email',
+        'streaming',
+        'user-read-private',
+        'user-top-read',
+        'app-remote-control'
+    ];
+
+    // If there is no token, redirect to Spotify authorization
+    if (!_token) {
+        window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=false`;
+    }
+
+    var trackListsList = [];
+    var currentTrackList = [];
+    var usedTrackList = [];
+
+    var currentPlaylistID;
+    var playlistIDlist = [];
+
+    var allTracksString;
+    var recommendedTrackIDs = [];
+    var recommendedTracks = [];
+    var recommendedTrackIDString;
+
+    function createRecommendedTrackLists() {
+
+        if (_token) {
+
+            @foreach (var item in Model)
+            {
+            <text>
+
+            usedTrackList = [];
+            recommendedTrackIDs = [];
+
+            currentTrackList = getSongs('@item.spotifyPlaylistID', _token)
+
+            if (currentTrackList.length <= 5)
+            {
+                for (j = 0; j < currentTrackList.length; j++)
+                {
+                    usedTrackList.push(currentTrackList[j])
+                }
+            }
+            else
+            {
+                for (j = 0; j < 5; j++)
+                {
+                    usedTrackList.push(currentTrackList[j])
+                }
+            }
+            
+
+            allTracksString = usedTrackList.join(",")
+            recommendedTracks = spotifyGetRecommendations(allTracksString, _token);
+
+            for (d = 0; d < 5; d++) {
+                recommendedTrackIDs.push(recommendedTracks[0].tracks[d].id);
+            }
+
+            currentPlaylistID = @item.playlistId
+            playlistIDlist.push(currentPlaylistID);
+
+            recommendedTrackIDString = recommendedTrackIDs.join(",")
+            trackListsList.push(recommendedTrackIDString);
+
+            </text>
+            }
+
+            console.log(trackListsList);
+
+        }
+    }
+
+    function spotifyGetRecommendations(tracks, authToken) {
+        var recommendedTracks = [];
+        $.ajax({
+            url: 'https://api.spotify.com/v1/recommendations?limit=5&market=US&seed_tracks=' + tracks,
+            method: "GET",
+            async: false,
+            headers: {
+                'Authorization': 'Bearer ' + authToken,
+            },
+            success: function (response) {
+                recommendedTracks.push(response)
+            },
+            error: function (response) {
+                //console.log(response);
+            }
+        });
+        return recommendedTracks
+    }
+
+    function getSongs(playlistId, authToken) {
+        var id = playlistId;
+
+        var trackIDList = [];
+        $.ajax({
+            url: 'https://api.spotify.com/v1/playlists/' + id + '/tracks',
+            method: "GET",
+            async: false,
+            headers: {
+                'Authorization': 'Bearer ' + authToken,
+                'Content-Type': 'application/json'
+            },
+            success: function (response) {
+                for (k = 0; k < response.items.length; k++) {
+                    trackIDList.push(response.items[k].track.id);
+                }
+            },
+            error: function (response) {
+
+            }
+        });
+        return trackIDList;
+    }
+
+    function postTrackSets() {
+        createRecommendedTrackLists()
+
+        var objAjax = new Object();
+        objAjax.PlaylistIDs = playlistIDlist;
+        objAjax.SongsLists = trackListsList;
+
+        $.ajax('@Url.Action("SendEmails", "Users")', {
+        type: 'POST',
+        data: JSON.stringify(objAjax),
+        contentType: "application/json",
+        async: false,
+        dataType: "json",
+        traditional: true,
+        success: function () {
+            console.log("Success!");
+        },
+        error: function () {
+
+        }
+        });
+    }
+
+
+</script>

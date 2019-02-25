@@ -4,7 +4,7 @@
     ViewBag.Title = "Search";
 }
 
-<h2>Get a reccomendation</h2>
+<h2>Get a recommendation</h2>
 <br />
 <h4>Here are some songs we think you might like.</h4>
 <p id="playlistSpace"></p>
@@ -41,7 +41,7 @@
 
     // Replace with your app's client ID, redirect URI and desired scopes
     const clientId = 'ddb6bd84d33c42aba1450a177ca0f23e';
-    const redirectUri = 'http://localhost:53881/Home/Reccommendation/';
+    const redirectUri = 'http://localhost:53881/Home/Recommendation/';
     const clientSecret = 'd2e2b989c762414c88b6c3121dd44a65';
 
     const scopes = [
@@ -66,17 +66,17 @@
         window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=false`;
     }
 
-    function createReccomendedPlaylist() {
+    function createRecommendedPlaylist() {
         var allTracks = [];
         var allPlaylists = [];
         var allTracksString;
-        var reccomendedTrackIDs = [];
-        var reccommendedTracks = [];
+        var recommendedTrackIDs = [];
+        var recommendedTracks = [];
         var formattedTrackIDs = [];
         
         if (_token) {
 
-            var reccomendedPlaylistId = spotifyMakeEmptyPlaylist("Reccommended songs");
+            var recommendedPlaylistId = spotifyMakeEmptyPlaylist("Recommended songs");
 
             @foreach (var item in Model)
             {
@@ -95,25 +95,25 @@
             allTracksString = allTracks.join(",")
             //console.log(allTracksString);
 
-            reccommendedTracks = spotifyGetReccommendations(allTracksString, _token);
+            recommendedTracks = spotifyGetRecommendations(allTracksString, _token);
 
 
             for (d = 0; d < 20; d++) {
-                reccomendedTrackIDs.push(reccommendedTracks[0].tracks[d].id);
+                recommendedTrackIDs.push(recommendedTracks[0].tracks[d].id);
             }
 
-            formattedTrackIDs = reccomendedTrackIDs.join(',spotify:track:');
-            spotifyAddTracksToReccommendedPlaylist(formattedTrackIDs, reccomendedPlaylistId);
+            formattedTrackIDs = recommendedTrackIDs.join(',spotify:track:');
+            spotifyAddTracksToRecommendedPlaylist(formattedTrackIDs, recommendedPlaylistId);
 
             var playlistSpace = document.getElementById("playlistSpace");
-            playlistSpace.innerHTML = '<iframe src="https://open.spotify.com/embed/playlist/' + reccomendedPlaylistId + '" width="600" height="400" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>';
+            playlistSpace.innerHTML = '<iframe src="https://open.spotify.com/embed/playlist/' + recommendedPlaylistId + '" width="600" height="400" frameborder="2" allowtransparency="true" allow="encrypted-media"></iframe>';
             
 
         }
     }
 
-    function spotifyGetReccommendations(tracks, authToken) {
-        var reccommendedTracks = [];
+    function spotifyGetRecommendations(tracks, authToken) {
+        var recommendedTracks = [];
         $.ajax({
             url: 'https://api.spotify.com/v1/recommendations?limit=20&market=US&seed_tracks=' + tracks,
             method: "GET",
@@ -122,13 +122,13 @@
                 'Authorization': 'Bearer ' + authToken,
             },
             success: function (response) {
-                reccommendedTracks.push(response)
+                recommendedTracks.push(response)
             },
             error: function (response) {
                 //console.log(response);
             }
         });
-        return reccommendedTracks
+        return recommendedTracks
     }
 
     function getSongs(playlistId, authToken) {
@@ -181,7 +181,7 @@
     }
 
     //ADDING TRACKS
-    function spotifyAddTracksToReccommendedPlaylist(tracks, playlistId) {
+    function spotifyAddTracksToRecommendedPlaylist(tracks, playlistId) {
         $.ajax({
             url: 'https://api.spotify.com/v1/playlists/' + playlistId + '/tracks?uris=spotify:track:' + tracks,
             method: "POST",
@@ -200,6 +200,6 @@
         });
     }
 
-    createReccomendedPlaylist();
+    createRecommendedPlaylist();
 
 </script>

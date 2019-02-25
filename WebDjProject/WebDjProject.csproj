@@ -283,10 +283,11 @@
     <Content Include="Views\Playlists\Search.cshtml" />
     <Content Include="Views\Playlists\Remove.cshtml" />
     <Content Include="Views\Profile\StripePayment.cshtml" />
-    <Content Include="Views\Home\Reccommendation.cshtml" />
+    <Content Include="Views\Home\Recommendation.cshtml" />
     <Content Include="Views\SharedUsers\PlaylistsIndex.cshtml" />
     <Content Include="Views\SharedUsers\Index.cshtml" />
     <Content Include="Views\SharedUsers\UserFollowList.cshtml" />
+    <Content Include="Views\Users\GetSongs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

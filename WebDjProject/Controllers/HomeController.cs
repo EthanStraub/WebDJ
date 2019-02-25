@@ -42,7 +42,7 @@ namespace WebDjProject.Controllers
            return View();
         }
 
-        public ActionResult Reccommendation()
+        public ActionResult Recommendation()
         {
             ApplicationDbContext db = new ApplicationDbContext();
             string userId = User.Identity.GetUserId();
