@@ -15,7 +15,6 @@ namespace WebDjProject.Models
         [Key]
         public int playlistId { get; set; }
         [ForeignKey("ApplicationUser")]
-        //playlist.ApplicationUserId = User.Identity.GetUserId();
         public string ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         [Display(Name = "Playlist name")]

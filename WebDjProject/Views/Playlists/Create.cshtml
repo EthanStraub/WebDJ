@@ -111,14 +111,10 @@
             },
             data: myData,
             success: function (response) {
-                console.log(response);
-
                 playlistId = response.id;
                 document.getElementById("hiddenPlaylistID").value = playlistId
             },
             error: function (response) {
-                console.log(response);
-                console.log("ERROR");
             }
         });
     }

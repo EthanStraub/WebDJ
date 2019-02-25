@@ -115,7 +115,7 @@
             </text>
             }
 
-            console.log(trackListsList);
+            //console.log(trackListsList);
 
         }
     }
@@ -133,7 +133,6 @@
                 recommendedTracks.push(response)
             },
             error: function (response) {
-                //console.log(response);
             }
         });
         return recommendedTracks
@@ -178,10 +177,9 @@
         dataType: "json",
         traditional: true,
         success: function () {
-            console.log("Success!");
+            //console.log("Success!");
         },
         error: function () {
-
         }
         });
     }

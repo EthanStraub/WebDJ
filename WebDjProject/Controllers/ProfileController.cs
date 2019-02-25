@@ -177,8 +177,6 @@ namespace WebDjProject.Controllers
         {
             StripeConfiguration.SetApiKey("sk_test_dFDizp08z3Cyn2klQBvAMvOc");
 
-            //var token = model.Token; 
-
             var options = new ChargeCreateOptions
             {
                 Amount = 999,
@@ -206,7 +204,6 @@ namespace WebDjProject.Controllers
                 UserManager.AddToRole(userID, "PremiumUser");
                 SendMail(userAddress, userName);
                 Thread.Sleep(2000);
-                //FormsAuthentication.SignOut();
             }
 
             db.SaveChanges();

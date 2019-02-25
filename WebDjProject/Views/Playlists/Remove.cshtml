@@ -113,7 +113,6 @@
 
         if (usedPlaylistIDs) {
 
-            //console.log(usedPlaylistIDs);
 
             if (_token) {
 
@@ -122,7 +121,6 @@
 
                 for (i = 0; i < usedPlaylistIDs.length; i++) {
 
-                    //console.log(_token);
 
                     displayedTracks = [];
 
@@ -131,30 +129,19 @@
 
                     if ((trackIDNamePairList !== undefined) && trackIDNamePairList.length > 0) {
 
-                        //console.log("Index: " + i);
-
-                        //console.log(trackIDNamePairList);
                         var nonNullList = trackIDNamePairList;
-                        //console.log(nonNullList);
                         delayedResponse(nonNullList, usedPlaylistNames[i], usedPlaylistIDs[i]);
                     }
 
-                    //console.log("Index: " + i);
                 }
-
-                //console.log(trackIDNamePairList);
-
-                //delayedResponse(trackIDNamePairList, usedPlaylistNames)
             }
 
-            //window.setTimeout(delayedResponse, 3000);
 
         }
 
     }
 
     function delayedResponse(nonNullList, usedPlaylistName, usedPlaylistID) {
-        //console.log("TEST");
         var nameRow = table.insertRow();
         nameRow.innerHTML = "<br /><br /><h2>" + usedPlaylistName + "</h2><br />"
 
@@ -170,19 +157,14 @@
                 var trackRow2 = table.insertRow();
                 var buttonRow = table.insertRow();
 
-                var displayedTrackName = nonNullList[j * 2 - 2]
-                var displayedTrackID = nonNullList[j * 2 - 1]
-                //console.log(nonNullList[i * 2 - 1]);
-                //console.log(nonNullList[i * 2]);
+                var displayedTrackName = nonNullList[j * 2 - 2];
+                var displayedTrackID = nonNullList[j * 2 - 1];
                 trackRow1.innerHTML = "<br /><h5>" + displayedTrackName + "</h5>"
                 trackRow2.innerHTML = "<dl><dt> ID: " + displayedTrackID + "</dt></dl>"
 
                 buttonRow.innerHTML = '<input id="' + btnId + '" type="button" class="btn btn-danger" value="Remove" /><br />';
 
 
-                //var addressedIndex = (btnIndex + 2) % numOfLists;
-                //console.log(addressedIndex);
-                //console.log(btnId);
 
                 pushedTrackID = displayedTrackID.toString() + "_" + pushedIndex.toString();
 
@@ -198,14 +180,10 @@
 
 
 
-
                 function delTrack() {
-                    //console.log(usedPlaylistID);
-                    console.log(trackIndex);
-                    //console.log(displayedTrackID);
-                    //console.log(_token);
                     spotifyRemoveTrack(usedPlaylistID, displayedTrackID, trackIndex, _token)
                 }
+
             }());
             
 
@@ -228,29 +206,14 @@
                 'Content-Type': 'application/json'
             },
             success: function (response) {
-
-
                 for (k = 0; k < response.items.length; k++) {
-                    //console.log(response.items[i].track.id);
-                    //console.log(response.items[i].track.name);
                     trackIDandNameList.push(response.items[k].track.name);
                     trackIDandNameList.push(response.items[k].track.id);
                 }
-
-                //console.log('1');
-                //console.log(response);
-                //console.log('2');
-                //console.log('PlistID_' + id);
-                //document.getElementById('PlistID_' + id).value = 7;
-                //console.log(document.getElementById('PlistID_' + id));
-
             },
             error: function (response) {
-                //console.log(response);
             }
         });
-        //console.log(trackIDandNameList);
-        //console.log(_token);
         return trackIDandNameList;
     }
 
@@ -271,13 +234,8 @@
                 location.reload(true);
             },
             error: function (response) {
-                console.log(response);
             }
         });
     }
-
-
-    //getSongs('7oFCgqPhLW39EHcoMnIdXX', _token);
-    //spotifyRemoveTrack('7oFCgqPhLW39EHcoMnIdXX','53NkOWxyBmjUKHl30A8l9S',4, _token)
     displayPlaylists()
 </script>

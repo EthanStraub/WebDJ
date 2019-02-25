@@ -94,7 +94,7 @@ namespace WebDjProject.Controllers
             client.UseDefaultCredentials = false;
             client.Credentials = new System.Net.NetworkCredential("biblebot99@gmail.com", "Carbuncle#9");
 
-            MailMessage mm = new MailMessage(address, address, "WebDJ -- Premium Account Recommendations", "Hello " + name + "! Based on the playlist '" + playlistName + "' you made using our website, here are some songs we think you might like. https://open.spotify.com/track/" + Songlist[0] + " https://open.spotify.com/track/" + Songlist[1] + "https://open.spotify.com/track/" + Songlist[2] + "https://open.spotify.com/track/" + Songlist[3] + "https://open.spotify.com/track/" + Songlist[4]);
+            MailMessage mm = new MailMessage(address, address, "WebDJ -- Premium Account Recommendations", "Hello " + name + "! Based on the playlist '" + playlistName + "' you made using our website, here are some songs we think you might like. \n https://open.spotify.com/track/" + Songlist[0] + " \n https://open.spotify.com/track/" + Songlist[1] + " \n https://open.spotify.com/track/" + Songlist[2] + " \n https://open.spotify.com/track/" + Songlist[3] + " \n https://open.spotify.com/track/" + Songlist[4]);
             mm.BodyEncoding = UTF8Encoding.UTF8;
             mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
 

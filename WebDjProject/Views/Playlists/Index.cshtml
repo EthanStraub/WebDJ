@@ -118,18 +118,12 @@ else
         window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=false`
     }
 
-    //gets called twice??
-    //console.log('creation');
-
-    //button assignment for debugging purposes
-
-    //var syncBtn = document.getElementById("sync");
-    //if (syncBtn.addEventListener)
-    //    syncBtn.addEventListener("click", spotifySync, false);
-    //else if (syncBtn.attachEvent)
-    //    syncBtn.attachEvent('onclick', spotifySync);
-
     function spotifySync() {
+
+        if (_token) {
+            var songCountSet = [];
+        var playlistIdSet = [];
+
         @foreach (var item in Model)
         {
         <text>
@@ -137,18 +131,20 @@ else
         var inputedName = '@item.playlistName';
         var inputedId = '@item.spotifyPlaylistID';
         var token = _token
-        //console.log(token);
+
         spotifyNameSync(inputedName, inputedId, token);
         spotifySongCountSync(inputedId, token);
         var newCount = spotifySongCountSync(inputedId, token);
 
-        //I'm not entirely sure why this is needed here but...
-        //It's the only thing keeping the ajax request functioning.
-        console.log(newCount);
+        songCountSet.push(newCount);
+        playlistIdSet.push('@item.playlistId');
+
+        </text>
+        }
 
         var objAjax = new Object();
-        objAjax.songCount = newCount; // Model prop is int type so this value must be int.
-        objAjax.playlistId = '@item.playlistId';
+        objAjax.songCountSet = songCountSet; // Model prop is int type so this value must be int.
+        objAjax.playlistIdSet = playlistIdSet;
 
         $.ajax('@Url.Action("UpdateSongCount", "Playlists")', {
         type: 'POST',
@@ -158,16 +154,11 @@ else
         dataType: "json",
         traditional: true,
         success: function (returnData) {
-            //console.log(returnData);
         },
         error: function () {
-            //console.log("Error!");
         }
         });
-
-        </text>
         }
-
     }
 
 
@@ -183,13 +174,11 @@ else
                 'Authorization': 'Bearer ' + authToken,
                 'Content-Type': 'application/json'
             },
-            //beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + authToken); xhr.setRequestHeader('Content-Type', 'application/json') },
+            
             data: myData,
             success: function () {
-                //console.log("Playlist changed");
             },
             error: function () {
-                //console.log("ERROR");
             }
         });
     }
@@ -210,15 +199,10 @@ else
             success: function (response) {
 
                 playlistSongCount = response.items.length;
-                //console.log(playlistSongCount);
                 return playlistSongCount;
-                //console.log('PlistID_' + id);
-                //document.getElementById('PlistID_' + id).value = 7;
-                //console.log(document.getElementById('PlistID_' + id));
 
             },
             error: function (response) {
-                //console.log(response);
             }
         });
         return playlistSongCount;

@@ -168,7 +168,6 @@
     var dataResults = "";
     var searchURL = "https://api.spotify.com/v1/search?q=";
     var table = document.getElementById("resultsTable");
-    //var songIndexNum = 0;
 
     //ALBUMS
     function spotifyAlbumSearch(term) {
@@ -184,7 +183,6 @@
             beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
             success: function (data) {
 
-                console.log(data);
                 for (var albumData in data) {
 
                     var albumItemList = [];
@@ -197,7 +195,6 @@
                     var index = 0;
 
                     var results = albumItemList[1];
-                    //console.log(results);
                     if (results.length >= 1) {
                         $.each(results, function (key, val) {
                             var row = table.insertRow();
@@ -233,7 +230,6 @@
             beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
             success: function (data) {
 
-                console.log(data);
                 for (var artistData in data) {
 
                     var artistItemList = [];
@@ -246,7 +242,6 @@
                     var index = 0;
 
                     var results = artistItemList[1];
-                    //console.log(results);
                     if (results.length >= 1) {
                         $.each(results, function (key, val) {
                             var row = table.insertRow();
@@ -281,7 +276,6 @@
             type: "GET",
             beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
             success: function (data) {
-                console.log(data);
                 for (var trackData in data) {
 
                     var trackItemList = [];
@@ -296,7 +290,6 @@
 
 
                     var results = trackItemList[1];
-                    console.log(results);
                     if (results.length >= 1) {
 
                         var playlistIDList = pushPlaylistIDs();
@@ -315,7 +308,7 @@
                                 buttonRow.innerHTML = '<td><input id="' + btnId + '" type="button" class="btn btn-secondary" value="Add track to ' + playlistNameList[i] + '" /></td><br/>';
 
                                 var addressedIndex = (btnIndex + playlistIDList.length - 1) % playlistIDList.length;
-                                //console.log(addressedIndex);
+                                
 
 
                                 switch (addressedIndex) {
@@ -357,7 +350,6 @@
 
                                 }
 
-                            //console.log("DEBUG");
                             }
 
                             var usedTrack = val.id;
@@ -383,7 +375,6 @@
                                 spotifyAddTrackToPlaylist(usedTrack, playlistIDList[4])
                             }
 
-                            //console.log("TEST");
 
                         });
 
@@ -415,7 +406,6 @@
             beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
             success: function (data) {
 
-                console.log(data);
                 for (var playlistData in data) {
 
                     var playlistItemList = [];
@@ -428,7 +418,6 @@
                     var index = 0;
 
                     var results = playlistItemList[1];
-                    //console.log(results);
                     if (results.length >= 1) {
                         $.each(results, function (key, val) {
                             var row = table.insertRow();
@@ -463,11 +452,8 @@
             },
             success: function (response) {
                 alert("Song added to playlist.");
-                //console.log(response);
             },
             error: function (response) {
-                //console.log(response);
-                //console.log("ERROR");
             }
         });
     }
@@ -483,7 +469,6 @@
             type: "GET",
             beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
             success: function (data) {
-                console.log(data);
                 for (var trackData in data) {
 
                     var trackItemList = [];
@@ -498,7 +483,6 @@
 
 
                     var results = trackItemList[1];
-                    console.log(results);
                     if (results.length >= 1) {
 
                         $.each(results, function (key, val) {
@@ -519,7 +503,6 @@
                             else if (featureTrackBtn.attachEvent)
                                 featureTrackBtn.attachEvent('onclick', feature);
 
-                            //console.log("DEBUG");
 
                             var usedTrack = val.id;
 
@@ -547,7 +530,6 @@
     function spotifyFeatureTrack(trackID) {
         var trackIdObject = new Object();
         trackIdObject.trackID = trackID;
-        //console.log(trackID);
 
         $.ajax('@Url.Action("Index", "Home")', {
         type: 'POST',
@@ -559,8 +541,6 @@
             alert("Song has been featured.")
         },
         error: function (returnData) {
-            console.log(returnData);
-            console.log("Error!");
         }
         });
     } 
@@ -571,7 +551,6 @@
             type: "GET",
             beforeSend: function (xhr) { xhr.setRequestHeader('Authorization', 'Bearer ' + _token); },
             success: function (data) {
-                //console.log(data.id);
                 return data.id;
             }
         });
@@ -586,7 +565,6 @@
         var pStatus = premiumCheck();
 
         if (pStatus == false && sCount >= 20) {
-            //console.log("PLAYLIST '@item.playlistName' IS FULL");
         }
         else
         {
@@ -608,17 +586,13 @@
         var sCount = '@item.songCount'
         var pStatus = premiumCheck();
 
-        //console.log("TEST1");
         if (pStatus == false && sCount >= 20) {
-            console.log("PLAYLIST '@item.playlistName' IS FULL");
         }
         else
         {
-            
             var usedPlaylistName = '@item.playlistName';
             usedPlaylistNames.push(usedPlaylistName);
         }
-        //console.log("TEST2");
         
         </text>
         }
@@ -636,11 +610,6 @@
             return true;
         }
     }
-
-    //debugging
-    //spotifyGetUserId();
-    //spotifyAddTrackToPlaylist('2VVI3s5cAGh2YMDmmmEV44', '5T5TP1CtWYKwOiH9zpJH9D');
-    //premiumCheck();
 
 
 

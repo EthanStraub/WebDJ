@@ -175,11 +175,16 @@ namespace WebDjProject.Controllers
 
         
         [HttpPost, ActionName("UpdateSongCount")]
-        public ActionResult UpdateSongCount(Playlist playlist)
+        public ActionResult UpdateSongCount(List<int> songCountSet, List<int> playlistIdSet)
         {
-            Playlist oldPlaylist = db.Playlists.Where(p => p.playlistId == playlist.playlistId).Single();
+            for (int k = 0; k < playlistIdSet.Count; k++)
+            {
+                var currentId = playlistIdSet[k];
 
-            oldPlaylist.songCount = playlist.songCount;
+                Playlist oldPlaylist = db.Playlists.Where(p => p.playlistId == currentId).Single();
+
+                oldPlaylist.songCount = songCountSet[k];
+            }
             
             db.SaveChanges();
 

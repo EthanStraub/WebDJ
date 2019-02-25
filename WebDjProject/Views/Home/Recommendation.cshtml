@@ -93,7 +93,6 @@
             }
 
             allTracksString = allTracks.join(",")
-            //console.log(allTracksString);
 
             recommendedTracks = spotifyGetRecommendations(allTracksString, _token);
 
@@ -125,7 +124,6 @@
                 recommendedTracks.push(response)
             },
             error: function (response) {
-                //console.log(response);
             }
         });
         return recommendedTracks
@@ -168,13 +166,9 @@
             },
             data: myData,
             success: function (response) {
-                console.log(response);
-
                 newPlaylistId = response.id;
             },
             error: function (response) {
-                console.log(response);
-                console.log("ERROR");
             }
         });
         return newPlaylistId;
@@ -191,11 +185,8 @@
                 'Content-Type': 'application/json'
             },
             success: function (response) {
-                //console.log(response);
             },
             error: function (response) {
-                //console.log(response);
-                //console.log("ERROR");
             }
         });
     }

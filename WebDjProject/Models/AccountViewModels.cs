@@ -87,10 +87,6 @@ namespace WebDjProject.Models
 
         public bool PrivateStatus { get; set; }
 
-        //outdated
-        //[Required]
-        //[Display(Name = "User Role")]
-        //public string UserRoles { get; set; }
     }
 
     public class ResetPasswordViewModel
